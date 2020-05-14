@@ -8,36 +8,25 @@ import java.util.Map;
 
 public class DirectionsServiceImpl implements DirectionsService {
 
+    private final static String url = "https://maps.googleapis.com/maps/api/directions/json?" +
+            "origin={origin}&destination={destination}&key={key}";
+
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Override
-    public String getRoute(String origin, String destination, int departureTime) {
-        Map<String, String> params = new HashMap<>();
-        params.put("origin", origin); //multiple origins and dest divided by '|'
-        params.put("destination", destination);
-        params.put("dep_time", String.valueOf(departureTime));
-        params.put("key", ApiKeyProvider.google_api_key);
-
-        return restTemplate.getForObject(getRouteUrl(false), String.class, params);
-    }
+    //https://developers.google.com/maps/documentation/directions/intro
+    //origin        — The address, textual latitude/longitude value, or place ID from which you wish to calculate directions
+    //                  origin=24+Sussex+Drive+Ottawa+ON
+    //                  origin=41.43206,-81.38992
+    //destination   — The address, textual latitude/longitude value, or place ID to which you wish to calculate directions.
+    //                The options for the destination parameter are the same as for the origin parameter, described above.
 
     @Override
-    public String getRoute(String origin, String destination, int departureTime, String waypoints) {
+    public String getRoute(String origin, String destination) {
         Map<String, String> params = new HashMap<>();
-        params.put("origin", origin); //multiple origins and dest divided by '|'
+        params.put("origin", origin);
         params.put("destination", destination);
-        params.put("waypoints", waypoints);
-        params.put("dep_time", String.valueOf(departureTime));
         params.put("key", ApiKeyProvider.google_api_key);
 
-        return restTemplate.getForObject(getRouteUrl(true), String.class, params);
-    }
-
-    private String getRouteUrl(boolean includeWaypoints) {
-        return "https://maps.googleapis.com/maps/api/directions/json?" +
-                "origin={origin}&destination={destination}" +
-                (includeWaypoints ? "&waypoints={waypoints}" : "") +
-                "&departure_time={dep_time}" +
-                "&key={key}";
+        return restTemplate.getForObject(url, String.class, params);
     }
 }
