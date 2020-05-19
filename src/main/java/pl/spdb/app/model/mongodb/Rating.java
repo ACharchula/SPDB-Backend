@@ -1,4 +1,4 @@
-package pl.spdb.app.mongodb.model;
+package pl.spdb.app.model.mongodb;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

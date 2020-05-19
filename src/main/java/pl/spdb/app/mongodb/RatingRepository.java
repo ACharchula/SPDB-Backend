@@ -1,7 +1,7 @@
 package pl.spdb.app.mongodb;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import pl.spdb.app.mongodb.model.Rating;
+import pl.spdb.app.model.mongodb.Rating;
 
 import java.util.Optional;
 

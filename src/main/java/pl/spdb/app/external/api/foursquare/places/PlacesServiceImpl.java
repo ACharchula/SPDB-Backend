@@ -1,15 +1,20 @@
 package pl.spdb.app.external.api.foursquare.places;
 
+import com.google.gson.Gson;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.spdb.app.external.api.ApiKeyProvider;
+import pl.spdb.app.model.poi.PoiResponse;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class PlacesServiceImpl implements PlacesService {
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final Gson gson = new Gson();
 
     private final static String find_poi_url = "https://api.foursquare.com/v2/search/recommendations?" +
             "client_id={client_id}&client_secret={client_secret}&v={version}";
@@ -32,8 +37,13 @@ public class PlacesServiceImpl implements PlacesService {
     // localTime    - Only return results that are open at this time. HH in 24-hr format. (np. 20:00)
 
     @Override
-    public String getRecommendations(String lat, String lng, Integer radius, List<String> categoryIds, Integer limit,
-                                     List<String> prices, Integer localDay, String localTime) {
+    public PoiResponse getRecommendations(Double lat, Double lng, Integer radius, List<String> categoryIds, Integer limit) {
+        return getRecommendations(lat, lng, radius, categoryIds, limit, null, null, null);
+    }
+
+    @Override
+    public PoiResponse getRecommendations(Double lat, Double lng, Integer radius, List<String> categoryIds, Integer limit,
+                                          List<String> prices, Integer localDay, String localTime) {
 
         if (lat == null || lng == null)
             throw new IllegalArgumentException("Latitude and longitude can't be null!");
@@ -49,7 +59,8 @@ public class PlacesServiceImpl implements PlacesService {
         if (localDay != null && localDay > 0 && localDay <= 7) url = addLocalDay(localDay, url, params);
         if (localTime != null) url = addLocalTime(localTime, url, params);
 
-        return restTemplate.getForObject(url, String.class, params);
+        String json = restTemplate.getForObject(url, String.class, params);
+        return gson.fromJson(json, PoiResponse.class);
     }
 
     @Override
@@ -93,7 +104,7 @@ public class PlacesServiceImpl implements PlacesService {
         return url;
     }
 
-    private String addLL(String lat, String lng, String url, Map<String, String> params) {
+    private String addLL(Double lat, Double lng, String url, Map<String, String> params) {
         url += "&ll={ll}";
         params.put("ll", lat + "," + lng);
         return url;

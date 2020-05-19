@@ -1,5 +1,6 @@
 package pl.spdb.app.external.api.google.matrix.distance;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.spdb.app.external.api.ApiKeyProvider;
 
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class DistanceMatrixServiceImpl implements DistanceMatrixService {
 
     private static final String url = "https://maps.googleapis.com/maps/api/distancematrix/json?" +

@@ -1,5 +1,7 @@
 package pl.spdb.app.external.api.google.directions;
 
+import pl.spdb.app.model.route.Routes;
+
 public interface DirectionsService {
-    String getRoute(String origin, String destination);
+    Routes getRoute(String origin, String destination);
 }

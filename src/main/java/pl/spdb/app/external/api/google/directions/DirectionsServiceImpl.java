@@ -1,17 +1,22 @@
 package pl.spdb.app.external.api.google.directions;
 
+import com.google.gson.Gson;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.spdb.app.external.api.ApiKeyProvider;
+import pl.spdb.app.model.route.Routes;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class DirectionsServiceImpl implements DirectionsService {
 
     private final static String url = "https://maps.googleapis.com/maps/api/directions/json?" +
             "origin={origin}&destination={destination}&key={key}";
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final Gson gson = new Gson();
 
     //https://developers.google.com/maps/documentation/directions/intro
     //origin        — The address, textual latitude/longitude value, or place ID from which you wish to calculate directions
@@ -20,13 +25,16 @@ public class DirectionsServiceImpl implements DirectionsService {
     //destination   — The address, textual latitude/longitude value, or place ID to which you wish to calculate directions.
     //                The options for the destination parameter are the same as for the origin parameter, described above.
 
+
+    //TODO avoid highway???
     @Override
-    public String getRoute(String origin, String destination) {
+    public Routes getRoute(String origin, String destination) {
         Map<String, String> params = new HashMap<>();
         params.put("origin", origin);
         params.put("destination", destination);
         params.put("key", ApiKeyProvider.google_api_key);
 
-        return restTemplate.getForObject(url, String.class, params);
+        String json = restTemplate.getForObject(url, String.class, params);
+        return gson.fromJson(json, Routes.class);
     }
 }
