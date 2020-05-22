@@ -1,7 +1,9 @@
 package pl.spdb.app.external.api.google.matrix.distance;
 
+import pl.spdb.app.model.matrix.Rows;
+
 import java.util.List;
 
 public interface DistanceMatrixService {
-     String getDistanceMatrix(List<String> origins, List<String> destinations);
+     Rows getDistanceMatrix(List<String> origins, List<String> destinations);
 }

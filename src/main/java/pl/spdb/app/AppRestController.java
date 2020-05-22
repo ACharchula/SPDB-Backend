@@ -8,32 +8,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.spdb.app.algorithm.WaypointFinder;
 import pl.spdb.app.external.api.foursquare.places.PlacesService;
-import pl.spdb.app.external.api.google.matrix.distance.DistanceMatrixService;
 import pl.spdb.app.model.route.Routes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 public class AppRestController {
 
     @Autowired
-    DistanceMatrixService distanceMatrixService;
-
-    @Autowired
     PlacesService placesService;
 
     @Autowired
     WaypointFinder waypointFinder;
-
-    @GetMapping("/dev/mtx")
-    public @ResponseBody String matrix() {
-        List<String> origins = new ArrayList<>(Arrays.asList("Boston,MA", "Charlestown,MA"));
-        List<String> destinations = new ArrayList<>(Arrays.asList("Lexington,MA", "Concord,MA"));
-        return distanceMatrixService.getDistanceMatrix(origins, destinations);
-    }
 
     @GetMapping("/dev/test")
     public @ResponseBody String testing() {
@@ -50,588 +36,723 @@ public class AppRestController {
 
     private String getRoute() {
         return "{\n" +
-                "   \"geocoded_waypoints\" : [\n" +
-                "      {\n" +
-                "         \"geocoder_status\" : \"OK\",\n" +
-                "         \"place_id\" : \"ChIJyfm1gl_MHkcRCC9LvPySxRg\",\n" +
-                "         \"types\" : [ \"establishment\", \"point_of_interest\" ]\n" +
+                "  \"geocoded_waypoints\": [\n" +
+                "    {\n" +
+                "      \"geocoder_status\": \"OK\",\n" +
+                "      \"place_id\": \"ChIJAZ-GmmbMHkcR_NPqiCq-8HI\",\n" +
+                "      \"types\": [\n" +
+                "        \"locality\",\n" +
+                "        \"political\"\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"geocoder_status\": \"OK\",\n" +
+                "      \"place_id\": \"ChIJr1ZFdSTLG0cRrNshm2OufMs\",\n" +
+                "      \"types\": [\n" +
+                "        \"locality\",\n" +
+                "        \"political\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"routes\": [\n" +
+                "    {\n" +
+                "      \"bounds\": {\n" +
+                "        \"northeast\": {\n" +
+                "          \"lat\": 52.2320088,\n" +
+                "          \"lng\": 21.0173684\n" +
+                "        },\n" +
+                "        \"southwest\": {\n" +
+                "          \"lat\": 51.7592212,\n" +
+                "          \"lng\": 19.4559892\n" +
+                "        }\n" +
                 "      },\n" +
-                "      {\n" +
-                "         \"geocoder_status\" : \"OK\",\n" +
-                "         \"place_id\" : \"ChIJaYRG9mlbFkcRU7JNJ-Vy2p8\",\n" +
-                "         \"types\" : [ \"premise\" ]\n" +
-                "      }\n" +
-                "   ],\n" +
-                "   \"routes\" : [\n" +
-                "      {\n" +
-                "         \"bounds\" : {\n" +
-                "            \"northeast\" : {\n" +
-                "               \"lat\" : 52.2369723,\n" +
-                "               \"lng\" : 21.0848496\n" +
-                "            },\n" +
-                "            \"southwest\" : {\n" +
-                "               \"lat\" : 50.0476866,\n" +
-                "               \"lng\" : 19.9443626\n" +
-                "            }\n" +
-                "         },\n" +
-                "         \"copyrights\" : \"Map data ©2020 Google\",\n" +
-                "         \"legs\" : [\n" +
+                "      \"copyrights\": \"Map data ©2020 Google\",\n" +
+                "      \"legs\": [\n" +
+                "        {\n" +
+                "          \"distance\": {\n" +
+                "            \"text\": \"138 km\",\n" +
+                "            \"value\": 137666\n" +
+                "          },\n" +
+                "          \"duration\": {\n" +
+                "            \"text\": \"2 hours 29 mins\",\n" +
+                "            \"value\": 8934\n" +
+                "          },\n" +
+                "          \"end_address\": \"Łódź, Poland\",\n" +
+                "          \"end_location\": {\n" +
+                "            \"lat\": 51.7592212,\n" +
+                "            \"lng\": 19.4559892\n" +
+                "          },\n" +
+                "          \"start_address\": \"Warsaw, Poland\",\n" +
+                "          \"start_location\": {\n" +
+                "            \"lat\": 52.2291168,\n" +
+                "            \"lng\": 21.015462\n" +
+                "          },\n" +
+                "          \"steps\": [\n" +
                 "            {\n" +
-                "               \"distance\" : {\n" +
-                "                  \"text\" : \"297 km\",\n" +
-                "                  \"value\" : 296764\n" +
-                "               },\n" +
-                "               \"duration\" : {\n" +
-                "                  \"text\" : \"3 hours 34 mins\",\n" +
-                "                  \"value\" : 12850\n" +
-                "               },\n" +
-                "               \"end_address\" : \"Bożego Ciała 29, 33-332 Kraków, Poland\",\n" +
-                "               \"end_location\" : {\n" +
-                "                  \"lat\" : 50.0496509,\n" +
-                "                  \"lng\" : 19.9443626\n" +
-                "               },\n" +
-                "               \"start_address\" : \"Świętokrzyska 12, 00-044 Warszawa, Poland\",\n" +
-                "               \"start_location\" : {\n" +
-                "                  \"lat\" : 52.2369723,\n" +
-                "                  \"lng\" : 21.0175713\n" +
-                "               },\n" +
-                "               \"steps\" : [\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.6 km\",\n" +
-                "                        \"value\" : 633\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"2 mins\",\n" +
-                "                        \"value\" : 131\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.2352579,\n" +
-                "                        \"lng\" : 21.0087054\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Head \\u003cb\\u003ewest\\u003c/b\\u003e on \\u003cb\\u003eŚwiętokrzyska\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eDW719\\u003c/b\\u003e toward \\u003cb\\u003eKubusia Puchatka\\u003c/b\\u003e\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"apy}Hy~g_Cb@`EFb@Db@VtBLbAbAtIJ`ARdBr@xGR`Bl@fFFh@Dd@TtB\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.2369723,\n" +
-                "                        \"lng\" : 21.0175713\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.6 km\",\n" +
-                "                        \"value\" : 640\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"2 mins\",\n" +
-                "                        \"value\" : 115\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.2299527,\n" +
-                "                        \"lng\" : 21.0112515\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Turn \\u003cb\\u003eleft\\u003c/b\\u003e onto \\u003cb\\u003eMarszałkowska\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-left\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"key}Hmgf_CF`@@NBN\\\\URKt@]hAk@\\\\OBCTMxDsBp@[xAs@n@_@LGl@]h@W|@e@f@UXMNGZI~@YNGJEFC^C`@A\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.2352579,\n" +
-                "                        \"lng\" : 21.0087054\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.4 km\",\n" +
-                "                        \"value\" : 449\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 65\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.2285204,\n" +
-                "                        \"lng\" : 21.0051058\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Turn \\u003cb\\u003eright\\u003c/b\\u003e onto \\u003cb\\u003eal. Jerozolimskie\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eDW631\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"edx}Hiwf_CJb@JVRp@Nn@F\\\\F\\\\N`Al@~Ef@~DRfBP|AJ~@L`AVhBJv@Fd@\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.2299527,\n" +
-                "                        \"lng\" : 21.0112515\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.2 km\",\n" +
-                "                        \"value\" : 213\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 43\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.2279632,\n" +
-                "                        \"lng\" : 21.0021163\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue straight to stay on \\u003cb\\u003eal. Jerozolimskie\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eDW631\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"straight\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"g{w}H}pe_CXbCb@lDDV@RBP@L?B?PBPHp@T|B\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.2285204,\n" +
-                "                        \"lng\" : 21.0051058\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.9 km\",\n" +
-                "                        \"value\" : 935\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"3 mins\",\n" +
-                "                        \"value\" : 152\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.225146,\n" +
-                "                        \"lng\" : 20.9891921\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"At the roundabout, take the \\u003cb\\u003e1st\\u003c/b\\u003e exit and stay on \\u003cb\\u003eal. Jerozolimskie\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eDW631\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"roundabout-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"www}Hg~d_C@PBN@B@L@B@H@DBNBNBL?@P|@\\\\dBBLHb@Hr@t@vFBVd@nDRzAFj@Hr@p@nFBT`AxHhApID^|@~G^nC?@`@vD\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.2279632,\n" +
-                "                        \"lng\" : 21.0021163\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"6.2 km\",\n" +
-                "                        \"value\" : 6186\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"7 mins\",\n" +
-                "                        \"value\" : 407\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.1905481,\n" +
-                "                        \"lng\" : 20.919931\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"At \\u003cb\\u003eplac Artura Zawiszy\\u003c/b\\u003e, take the \\u003cb\\u003e1st\\u003c/b\\u003e exit onto \\u003cb\\u003eal. Jerozolimskie\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eDW717\\u003c/b\\u003e\\u003cdiv style=\\\"font-size:0.9em\\\"\\u003eContinue to follow al. Jerozolimskie\\u003c/div\\u003e\",\n" +
-                "                     \"maneuver\" : \"roundabout-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"efw}Hmmb_C\\\\fB?@@@Z~A\\\\~AZ|AZ~AVnAR|@bA~E`@nBVlAH`@VvAJd@TjAPr@`@tBFZDRz@vEj@xDd@hC\\\\jBH^F`@FXF`@Hb@~@zFr@pDb@bCd@fCp@pDV|AFXNj@BL@DLj@X|ATrALb@p@lBhB`H\\\\lAPn@`@vAv@jCd@`B^xAr@bD`ArEDDBBDJ`AnEBJl@lCh@|BR~@FRH\\\\?DXhA@D@F?BNl@?BT|@ZxAbAnE`@fBH^h@rBl@nBj@zAX~@rA`CpArB?@hH`MBDT^Zf@NXl@bAp@dA|ClF|AjCVb@\\\\j@?@R\\\\DHDHdBvC~CnF@BZf@`AbBlAxBp@jAxCfFvEhIPXNXd@v@JPLTLRNVNVzBtD|ApCh@~@vAvB`A|AHLn@dArC|ElArBVb@R^@?fB|CZf@|ClFT^BFfCvE~AvCLTrC~ENR`CjDdAnAjAzADFLPdBdDBDT`@r@jAlB`DTf@z@|AdDdGhDrGt@pApEjItBxD\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.225146,\n" +
-                "                        \"lng\" : 20.9891921\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"2.8 km\",\n" +
-                "                        \"value\" : 2782\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"2 mins\",\n" +
-                "                        \"value\" : 102\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.1667087,\n" +
-                "                        \"lng\" : 20.9084992\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue onto \\u003cb\\u003eDK7\\u003c/b\\u003e (signs for \\u003cb\\u003eUrsynów\\u003c/b\\u003e)\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"}mp}Hq|t~B|AlCd@l@bBxBh@b@dAn@n@X`A\\\\j@PPDPBbARdBd@lCl@f@Ld@J~@T`AXrBf@~A`@RFxFvAF@~EpANDhBb@bBd@LDtBh@bB\\\\fDx@~A`@vDbAnBf@vD~@pBr@fBl@nAf@`Bp@~Al@hAd@`CfA`@RhD~Ax@^HDnGtCvDdB`FxBhAh@hAf@\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.1905481,\n" +
-                "                        \"lng\" : 20.919931\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"4.0 km\",\n" +
-                "                        \"value\" : 3978\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"2 mins\",\n" +
-                "                        \"value\" : 140\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.1357546,\n" +
-                "                        \"lng\" : 20.8803644\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue onto \\u003cb\\u003eDK7\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eS8\\u003c/b\\u003e\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"}xk}Hcur~BdBv@t@ZhHbDxC|AnAr@x@d@vD`CbChBfIvGzApAzFxExDbDlEpDxCfCxCrCr@t@|A`B|CpDvAdBrAfBr@`AtAnBpCjErB~CrB`DnCfEdDhFlBvCxAzBbAvAzArBvAjBn@v@l@r@t@|@fArA~C`DxCnC~BtBfIbGt@h@vAx@bCxAnEnBdB|@VH`@L~Af@vFnB^L\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.1667087,\n" +
-                "                        \"lng\" : 20.9084992\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"1.2 km\",\n" +
-                "                        \"value\" : 1242\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 46\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 52.1250313,\n" +
-                "                        \"lng\" : 20.8775854\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Take the exit toward \\u003cb\\u003eDK7\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"ramp-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"mwe}Hgem~B|HzDrAr@PL`Ah@rBjAzBjA`Aj@jAj@l@T`@Pb@PB@lA`@|Ab@v@RxAZ`@DB?fAHb@DL@tAAtAA`AIp@I~@O~Bo@z@WNGxB_A\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.1357546,\n" +
-                "                        \"lng\" : 20.8803644\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"23.4 km\",\n" +
-                "                        \"value\" : 23433\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"19 mins\",\n" +
-                "                        \"value\" : 1159\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 51.9233035,\n" +
-                "                        \"lng\" : 20.8513628\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue onto \\u003cb\\u003eDK7\\u003c/b\\u003e\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"mtc}H}sl~Bx@]DCNKTS|@_ANMxCoCXUh@m@bAgAf@k@dDiEfAwAPS`B{Bl@u@dB}BjCgDrBmC`BwBBEhA{AfBkB\\\\g@tA_Bj@w@t@o@f@c@z@s@`Aq@BA`Ao@BAVOx@c@z@_@ZM\\\\Mr@WJAbAWx@Or@Kf@G|@G\\\\Av@?R?p@@`@@l@DRBRBt@Hb@F|@PdATPDf@JzHzBn@PlBl@hAZxGlBdElAvEtAf@Nx@Tr@R`AZpA^^JVFRJ`AX|IjChI~BlDbAhI`Cd@LjDbAvEtApA^b@LzDfA`MnDdD`AfA^~Af@H@pBj@dD~@rDdAhBh@jFxAr@PpCz@r@TrA^`AZ~P~EtJpCbEjA~Ab@`Cp@~Ab@dFzAx@T~Br@PDlDdAv@RtEtAhJjC|Bn@hD`AZJfAZtJpChAZ\\\\HpMxD~DjAjGfB|DhAtCx@fBf@rBl@x@TtDfApJnCvDfA`@JlCv@nKzCv@TnDdAvF~A~Br@vMzDrA^lLdDjAZzGnBhBh@v@TVHpLhDtNbE|DfAnGhBpF~A`D|@z@V\\\\J^JpEpAt@V|@XtDxApJvDxJ~D`@PxGdCzGhCr@Zr@XbEbBtAj@DBr@VvBz@nFxBhGbCtChAn@X|ClAjHtC|B|@`A^pBv@`HnCHD|ClA~EnBbBp@hAb@zClAl@TvClApHtC~EnBjCdAlLrETLbIvCx@NpAVjB@d@CLA^CnAOl@OBAjCgAlKcEvB{@~QmHt@WjBm@\\\\EtBU^?PAl@?ZB\\\\DN@F@`@FRDx@Zl@Vj@\\\\B@z@l@z@n@fA|@fA~@FFrD~CrD`D~@x@|@t@jC|BZV`Ax@b@^TRjEzDl@l@fA|@hCrBdDtC@@ZX@@zBnB^ZxBnBj@d@x@j@r@f@PH|@\\\\NDh@N`ALhAJ|@@v@?t@In@KnAYb@Kb@Kb@Mf@ODATEzD{@xJwCtDeArCs@rBi@zI{BxF{ArEkA`IsB~Ac@jA]v`@oK|Cy@`@K|NyDfBe@b@KjCs@^IP?J@n@HbADn@BvAEf@KlA]\\\\Kb@MlDeAfDuAf@S`CgA`CgArAe@`EeA`@KzAc@rA_@bG{Av@Q|Bk@bAWPAVAj@CjAEdAIdAIFAl@Gz@Mb@Gz@SxEqAB?XITG`@Oj@Y^U`@Qh@OxA]d@Mp@OVGlA[`Ci@pD}@lEgA~HsBhGwAdEcArBk@jBa@\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 52.1250313,\n" +
-                "                        \"lng\" : 20.8775854\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"2.7 km\",\n" +
-                "                        \"value\" : 2710\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"3 mins\",\n" +
-                "                        \"value\" : 182\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 51.90017049999999,\n" +
-                "                        \"lng\" : 20.8598399\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue straight to stay on \\u003cb\\u003eDK7\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"straight\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"sg|{H_pg~B|HsBzC{@z@S\\\\E\\\\Ch@AP@LAPCd@Ib@MrCy@t@Up@SXEVAR?LBNBd@FN@P?b@GTE\\\\K`@MXQNKPOv@w@^YROXSLG^K|HiBrAYb@GnAOlAUbB_@dDy@d@MXORMJIJMHKVg@JMHIbDw@@ABADCNKPOPYTc@`@_ATg@LSNS^e@VSVONIFCHAnBi@zAc@r@UT@P?H@LBNLHLFNFPBFBLDLDLDJFHNHHDLBF@H?H?d@GRGRG~NwD@AvGcBnBg@zC{@\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 51.9233035,\n" +
-                "                        \"lng\" : 20.8513628\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"190 km\",\n" +
-                "                        \"value\" : 190406\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 hour 42 mins\",\n" +
-                "                        \"value\" : 6097\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.4950178,\n" +
-                "                        \"lng\" : 20.1838456\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue onto \\u003cb\\u003eE77\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eS7\\u003c/b\\u003e (signs for \\u003cb\\u003eKraków\\u003c/b\\u003e)\\u003cdiv style=\\\"font-size:0.9em\\\"\\u003eContinue to follow S7\\u003c/div\\u003e\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"aww{H_ei~BdDy@|Cs@tAQnAK|@?l@AjADlAPp@Hh@L~@Xz@\\\\z@b@h@Xf@\\\\bChBbCjB\\\\XlGxExAbA|@f@bAf@f@Rr@Tp@P~@TbALr@HR@T@`ADjA@jBBrC@fCBxAB~KP~BBtL@zDFbEFl@@p@Dv@HdARx@Pt@TtAf@?@NDPH`@NpCfAhEbBlEfBxBx@dDpAfDpAfIdDfBn@jBn@x@Tj@Nh@JlAVh@Ff@HL@v@Dz@BrA?t@Al@GrBWh@Kn@O`@Kp@Uz@[bAe@|@i@JETQl@a@t@m@jAaAp@q@v@}@f@o@p@aA|@wAx@wAp@uAt@aBt@cBr@gB~@cCt@mB|BgGx@_CxEyMl@}AtAmD~@qBhAuBp@aA|@oAtA}Ar@s@`@]b@]f@c@r@g@j@c@lAw@rA_AjDaCf@]|EgDlDaCp@e@h@c@h@c@fGgErCoBjDaC`Ao@t@i@bC_BpBoA|Aw@xAk@nBi@nA[FC|@Q|Cw@PE`@K|HmBlEu@|Dw@|FwAzO_EjNmD~I{BtEkAhAYhBc@hCm@tJ{BlHiBbLsCpPaE|Bk@jIsB`Dw@rA]vD_AvIuBfQiEn@Q|JcCXIfJ{Bb@MnG}AHAXI`KeCxOyDdZmHj@O~L{CnA[`NeDHC~L{CFAj@OvIuBzKoCFAb@M|HoBjU}FvHmBlGiBz@WHCXI|@Y~EaB|@YfBk@tGuBFCjFaBFCXKHCz@W|WwI~@[tQuFrAa@dCw@pAg@bGmBrIqCtImC~@[`@MbMaEjRiGbGoBXItImCzBu@bFaBLEbFaBtC_AfBk@pRiG~HgCtDkA~E_BfDeApAc@bEsAvNwEbT}GvGuBlDiA`@MdA]|VcI`@M~WsIdA[`@OlDiA~JaDbM}D|VcI`@OlDgAjC{@fBk@xQ}FjGoBhBk@tLcEx@UnAa@rJ}CNGrKeDxJwCbIaC|Ak@xI_DhGyBnAg@FCt@e@p@_@l@Yl@[vBiA|@g@VOxA{@`@WZQDE^URMvByAv@k@@AfDiCv@o@|@u@dA_AnCyB|@{@zCaDvFmGnAuAjCaDz@gAp@{@zAkBv@{@zAiBtA_B~BiCl@s@l@o@`AiAvAaBjAwA\\\\_@Za@b@e@xAgBx@aAhD_EVYhD_EvAaB~AkB|AgBvAeBPQJOpA{AlBwBlAwAtCiD~DsEbDyDjC}Cz@aAZ_@nAwAlAyAfDyD\\\\a@NQJMfAoAvCcDzB_CrBsBzBuBpBeBXWdB_B|EkE|@y@\\\\]xEiEXWd@a@tGeGjE_EfGgFl@g@~A{@zAw@hBa@~A[l@MzBQpBH`BPD@~Cp@lDpA`Bt@tCnAbAd@dAd@|OfH`@Pf@TrH|C`Bp@nAh@`Cx@bAXv@TxCf@nCXbA?|AFPAbBGd@AbBElAQXEzBa@ZGt@OvAc@bAa@`@QLEpBaAf@Y`@S`@SJGzFoD`@UfHmE|CmBxH{E`CqA~BuAdGoDlEqCvA}@r@e@r@c@jBiA`JwF`Am@^U@AzFkDfHkEd@[~CoB\\\\SxEwCfFaDrG{DrBsAb@W`@W`Am@xPmK`IaFvD}BjNqIhIgFbDqBhHmE~AaArNwI~@k@@?nOoJ^WJGvA{@fKuGd@SpAw@vFkDj@]xGcEb@_@\\\\[BC`A_Az@aAr@y@n@w@l@y@DEn@aAh@aAhCcGlEwIfEoKnBqE~HwQzEwK|CeHbEkJv@eBrA_DzB_FbAwBp@oAvAaCtAqBv@{@VY`CyBr@k@d@a@nA_AzAw@r@[`A]ZMn@Sv@Sh@Kx@Mt@MxAMbDQ`BMxAMr@Gl@Iz@QbA[^K|@a@nAm@j@a@r@e@`@_@n@k@^a@|@cABE\\\\a@@AV_@`@k@`@s@t@oAXo@d@eAf@mAl@{AbAgCVk@Na@DKjB{EdBeE~BeGdBiEpDeJdCqGzBwFb@iAFOhBsErAiDhBoEvBqFtBkF~AeEbCiG~B}FvBoF@EVm@tBmFd@qAbB}DhBwEj@{AbEcLxAwDlJeV`HiQpFkNnOg`@pAmC`E{HZm@rEgIR[R[zAmB~G_IFEzEsEvAgAROpH}E~DqB|Am@hAc@jEoAb@KdA[TGvFcAn@GtCYpFOfD@xBDf@BT@xCTfFr@H@b@JrKtBRDnGlAxCl@TDTFjATvHzAhB^`@HvFhAhDv@ZJZH|GrB|@XfBl@dCx@d@RtHzCzD|AtGrC`@Pb@Nn@V`MnFlAl@dDbBhGxDhF`E^Z\\\\ZnFvE^\\\\`@\\\\zDjDrOdNf@d@h@f@jYdWnBdBhErD^Zr@l@vErDrFbEn@d@n@b@dCfBbEfDnChCrCnCnCpCdBtB\\\\`@\\\\^JN|FjHTXTV~FjHdBjB\\\\^hAnAl@l@hCdClAfA|ArA\\\\ZdE`D|CxB`An@~DjCdBfAvBtAdKvGp@`@fDvBZTpD`CrGfE|FrDtH|E|OdKbElChEnC|@j@h@\\\\LHbEjCfFjCvF`CfCz@rEjAxE`A`G~@nKv@|GX~Lt@T@rJh@tAFfO~@n@Bn@Dh@DlDPdJf@b@B~G^nE`@lALnIx@`H~@fJxAjATlCf@`BZdAPbARB?dCd@HBlFbAxKtBjDl@dAPfARZFXDjBZzCf@lEn@jBXtAVb@F@@f@FLB`ANb@FhEj@bQ`C@?`@Db@FbFn@hFfAj@LjEpAdCbAdBr@XJj@VfCjAFB|At@bAh@xC|A|DjBzDvAbBh@dBf@RDzBj@`@JPDr@NbB\\\\lAThHv@N@dBFfABfADdABN@R?`ABhBFn@@dDRvCNnE^`F`@~ARvBXl@HTDTBxCd@zBZfIbBlEbArCt@pCv@H@`Ct@PDPDj@LlA\\\\|IfCnA^x@Vb@LlDbAhBh@dAZVHXHtA`@jCt@dCr@lBj@`AXrD|@nAZrDt@`CZtC`@ZBvEd@t@Dv@Fj@D~@DhDPdGFB?^?bDElHY~AGzAMNAlAIdAIlL{@b@Eb@C`BMl@EfAGx@Ed@Cd@EfAG|@EpAIpDWx@GxBO|E[bBMb@CnBMjIg@|DIdDBnEVjEn@tCf@hB\\\\bBZD@zAXP@PBjANfALXDzDNfECNChDYjCa@n@OxBi@`FcBxBaAJE^ObAa@lAe@HCbA]v@Yp@OVEzBg@rB[v@I~@EvIIp@@pCAtB?~B@dD@rEDzADtA?\\\\@Z?xE`@fDp@pCr@RDNFvDzAvEdChChB^V\\\\Xf@\\\\nCnClAnALNl@p@|@fApDrElFlHlFnHjJjNpAnBXd@|CxEdBlC|FzItAtBxD~FpKpPb@p@Zd@pGtJxQ~X|AhCzF~IxBdDLTpIjMlIpMjDpFp@dAlD|Fh@v@Zf@lFbKbClF`@~@b@~@~F|NpEtLTl@JVHTTl@FRjPzb@tBpFjBbFj@zA`AfC~HvSt@nBtAtDTl@pKbYdBtEj@xATl@j@zA`AfClBbFzDdKjAzCTl@`AfC~KtYpOja@hBxEXv@vAtDTj@Tl@|GnQvDxJnJtVfCvGbKfXVp@`G|ONVBHlDfJlDbJpBhF~@`CTl@Pb@P`@nBpFbBlF`BnFlBdGfKr]hLf`@DNfCpIRn@Pn@`BpFbAhD~BdIrBbHlAxDb@zAp@bCdA`DFRXz@f@tAp@`BdCvFhAzBx@tAXd@tAtBr@bAzBtCdClCtBhBl@d@vB~AZRjBhA~@b@fAh@`Bv@nCt@vA`@LBhBb@xANr@FrBRtBFxBCD?pCDdB?bAArEDb@?jB?vC?jBB|@B~BLp@FnCZbDh@vD|@lA^jErAjKvDjCbArL|DdA^b@N`@NbA\\\\lBp@`OpFdGnBn@Tz@XjDpAd@NdEvAzFvB`C`A|CrA~KpFlH~DLHvBfAbAb@dBr@rAd@jA^bCn@pAZhEr@vBTrAJbBHb@@zQ\\\\rBFfA@hBBb@@fA@~GJR@|DF|EH|ABtABb@@b@@bIL`BBbABnU^zDFbBBhCFrDFbHJjCDv@@~NTrFJzABpGXjBJnCN`Gt@vA^tAZx@PjA^t@Vn@TlBr@hAXrBdAzDfB@@ZT@@|BxAvBrA`Av@vAbA`BnAbCfCtArAhAlA?@VXz@dAlAvA~@fAFJLLlEjG@B@@X`@Xb@@@@@h@|@Zd@Xd@HNNT`@r@t@jA\\\\j@NVdBlCLPpB|CbBrCZb@Xf@pB~CrAxBpAnBTZvAdCnCdEjAlB`BfCb@j@HPz@~AlB`D|AdC\\\\l@nAbB~BzCjBjB`CbCp@j@BBbDdCZRxA~@j@Vv@^@?dBr@fAb@tBl@t@RlA\\\\fEl@tAJZ@pEFD?`FSVCvAM|Bc@j@M`Be@xCaAPI`@Q`Aa@@AvBeALIpByAn@c@h@_@l@i@j@c@x@s@z@{@\\\\c@\\\\]HKRUZ]x@_AhBaCbAqAbAoAvAkBNSjAaBjAwAhA}ANSjCcDdA_B@ClCmDRW~AoBhB}Bf@i@VWnDmD`CqB|ByAhG{C@AtHsB^Gv@MXEd@Eb@CVCVAzAMp@C~@CbAA|AD|@HV@rAN`@FfAHp@J\\\\F@?^FTF`@LbCv@rDtAJFlAj@FBDBbAh@B@\\\\Pl@XfCvAbAn@v@h@`@ZRNNLb@`@XVbAtAJRh@|@tAnCNTDJBDBHDDn@tA|@zAh@t@`@h@b@d@t@t@v@l@fCnBjA|@r@d@p@j@x@l@pB|A@@nCrBnA|@`DfC^Vb@ZlA~@NJj@`@v@h@PLp@^^RXJZJZHf@Jl@Fb@@^@^Bf@Af@CZCXCt@Ib@GLALCXEt@Kn@I\\\\ENCVCfAKhAKz@Iz@EtAIr@CD?p@Af@AP?v@CjBEjCCj@C`JKfCGPArLQ`@C~@Ap@Af@?Z@`@?l@@j@Ah@E\\\\AD?b@Az@CrBCjAAP?fBCLAz@A~@A|@CjBA`AApAClAAbBA|@AtACbBCnCCnEEbA@`@A\\\\Az@G`@C`@ArAAH?dDEdBCv@A\\\\?~@A|@?`AB~@Dv@Fv@Jz@L|@N~@V~@X|@Xx@^|@^j@ZbExBpDpBlE~BfCtAh@Xb@VFBrBfAvFzCtBhAzJnFTJb@VpDnBpEhChGlDhCzAfCzAjBhAVLjAr@~D`ChEfCp@d@XLnC~ALFVPjBbAlF|Cx@f@d@ZxA|@dC|Af@ZHFTLz@`@NH|ItFZPDBLHxBpA|BpAh@TlAd@rAf@`@J\\\\FnAP|@Jx@Hv@FL@nADbA?^@V?`@C`@EZEFAtBUbCa@b@Gl@KlBa@~@Qb@I^GnAWf@IVEb@GLATEf@CZAZCj@?l@AnAB`@@N@P@x@Hn@JP@VHv@PhA\\\\t@TXJvE`BRHb@L~@\\\\|Bv@|Bt@~@Tj@PZLj@LnAVpB^~Bd@lE|@nCp@z@RbDp@dE|@tJnB`VdFj@L`@JlAV~Dz@nE`AnCv@RFNDt@Zr@VVLhB|@LFd@Xf@ZhAx@|ApAdAdAbAhAdAvA`@h@`@l@n@`Al@dA\\\\n@\\\\p@x@bBhAfCVh@?@vCxGb@`ATh@f@hA~BjFTn@|DvIVj@j@nAvHpPrCfG`@z@DHf@fALVzCnGVh@b@~@bCjFTh@Vj@h@jAtChGj@pArCbGb@|@P^fFxKh@hAXn@zDfINXjDxHdAvBJV|C~GfEhJZl@b@|@~ErLbAjC|AfEt@|Bz@nC|CnKf@bBz@xCzDfNPn@`AjDnGpT`GzSRp@p@|Bz@xCHVX`AhA|D^jAj@bBn@fBzAtDrBfEzAnCtB`DHJx@lAt@~@hAvAfAnAXZHJHHxBjCv@|@Z\\\\l@r@fApArAbBnAfBFFDHb@p@@BRZFFLPjBtCjFfJXf@t@zAzA~C|CtGb@z@pAfCbD`HvBpEpD`ItDnHdEhI\\\\x@HNLZNXzLrWVh@~AhDvHhPhHxOXj@\\\\p@nBtEzIhQFNjCdGzCfHTf@HPr@`Bh@`AtArCpBfEfChF|CnG@BVh@hGjMpCzFXj@Vh@dBlDpArCf@hAb@hAh@|Ad@tAf@hBb@fB`@hBZ`B@DXjBVjBPzAP~AJnALhBJdBVtEJfBJbB@\\\\TpEVzENfCDb@PxBR`BTdBTpAVpAXrA^rAZfAb@nA`@jAn@vAt@xAd@~@Xf@HNnAvBzAlCLRJP~CrFPXXf@v@vAn@fAb@t@rC`FnAzBhAnBlF~IfApBrAbClA|BxArC`AnB^z@~AlDtA|Cz@lBb@bATl@`@z@|AxDjBbFFRlAfDnAtDtAhEh@hBBJNb@`@pAhAdExBxHbAdElAdFH^DRdAvElBtIDPzAxGdA~EpIha@xHta@|I`f@lEzUPx@Nv@~DzSnCjOrCbOhA|FnCfM~@fEbA`EbAbEnBdH~A~FxAlFbB~EVx@t@`CzBpHrBzGRn@xCnJtBnGL`@xB~GpFzQrBpHt@zCv@bDlBfIxBrKx@pE^zBdBzJh@bDTlBPdAZnB\\\\dCpBlPLz@l@tFz@rHP|AR|At@nG~@bIHt@Jv@ZrClAvK`BrNpB~PfA`KTzBDXDZTlBHh@@J\\\\pCNbAh@xEb@~D^pCf@pEFb@BPHt@zA~LdBrOf@nEt@rGXvBZlCj@vEp@zFr@nFz@hFhA|Gx@zDlAnFd@dBNp@Pp@ZfA|A|ElAtDRl@L`@xBzFzApDjAjCN\\\\jC`Fh@fAb@t@dCjEdCtD`CbD~FbHpHtGxAjAjHpFpBlA^T`@TlExBtAl@zFzBdE|AhEhBxAf@zAf@vAj@bA^`A^^JpAd@rBt@vBv@pBv@vAj@hAb@zAh@xAj@dG~BnFtBtAf@vAj@`C|@lCdAzAj@jAb@`A^HBhAb@ZLb@Ph@RtAh@lAb@jAd@|@\\\\VJHBz@\\\\bA^hAb@jAb@jAb@`A^z@\\\\bA\\\\`A^jAd@^Lx@ZfA`@dA`@h@Rf@RZLVJj@Td@Pd@PZLHBl@Vd@NHD`@N?@t@Zj@VZLj@X~@b@jAr@fAp@~@n@zAjAzArAbA`At@x@^b@~AnBtCdEJLvAzBfAlBpCvGr@bBx@dCxBzH~@zDn@fChBhHtBrHlAdDpAvCpA|BlAtBxB|CZZ\\\\^|A`B~CjCtAnAzApA@BxCtC\\\\\\\\dArAhAfAnBbCNTpAfBV\\\\rApBlBtCxDbGzBjDrDvFdH`LlAjBb@p@d@p@vAvBhAdBl@~@rFpIXd@Zd@bHrKxEhHv@tAzEfHXd@RXf@x@f@x@|@rA`C|CzAdB^\\\\fBdBxD~BxAv@jBx@nBh@bAP`@H@?b@D~@JdBJ~A?vBI|Dc@F?|@[jA_@fDuA|CoB`@]fCwBlByBpBoChB_D|@iBpA}Cd@kAj@yAhAyCzDeKHUJUj@yAvBuFtAuCtAmCjB_DnBqCrCeDz@}@z@{@fA_AhAy@vAcApAy@bEmBbCy@\\\\KpAYZGPCnF}@d@AtAEtBGh@@n@@t@BX@l@Dn@Fx@Jv@LbAR~Bj@rBn@~@^^PjAd@fAb@VJb@RNFPFbGdCzF~BhGfCJFHDTJB@`@R~BbAvDdBhCrAx@d@LFd@VJFv@f@n@`@l@d@pAx@`Av@PLjFhE@BjC~BJJ\\\\^jAhAlAjA\\\\\\\\jGdGpGlGfI|HrAvApCpCxAtAhFhF`C~B@@^\\\\\\\\Z|AvA\\\\Zl@j@nAfAdAv@~AdAzAdAd@TtBdAjAf@PH|Bx@`FpAdBZbAPvANfFT|@Ah@?t@?n@@bAAt@Av@?ZC|GEl@AdGGtGI~ACrG@~BH|AJ|@DdBXfATzBf@`Cx@lDxAXJfDrB~BbBZRlAhAdAbAXVhAhAz@`A|DzEZ\\\\r@x@fAvAJLnBdCvCzDvDpEPRbBtBfBdCpAnBrAhCrChGrAvDrAlEBLtAzFz@tEr@~Ep@xHVzDLpCDt@JvF?xHSnLKxHKvGU~PG~CBnD@v@?d@H|CNjEd@|Gl@pFv@~FbA~EHZdAbEHXdBlF@Fh@|AJRxAdDhBlDxAbCXf@pBhCd@l@vAzADDx@r@PNtBpBBBZV^X^XrB`BhA|@^Zf@^`ChBbCrB^XHFf@b@|EbE`EjC^V|@j@p@\\\\|@Vr@\\\\dC~@|Bp@|Bf@zB^b@FN@PBnGZnBEzCS|@EtGk@zCWtFg@hCUr@GNCPA~BQVCz@Kx@IlBQlBQrCWlDShCItEHjCPfBRx@NvA`@nATZJNBRFxBr@~Ap@hBp@rDpA~Bz@tCdARH\\\\JtAf@`C|@`EpALFLDbAd@vDtAl@PZLVJNH|@`@`@Vb@\\\\BB\\\\NjAp@n@\\\\pC`BxCnB~C~B`BvANJdCxB`B~AnAlAtC`Dv@z@~BtCTVPTPV|@lAxAzBlCbEtA|B\\\\n@`BtCdAtBxAvCJR|@pB|AlD\\\\z@z@tBxA|DbAvCtAhEf@|AfBnGz@bDj@dCf@rBlAzFbAjFnAnHz@`GNdAvCpRJt@Jl@XnBh@pDTvA|@hFt@vE@Dz@bG|@hGBJVzARhAF`@Ld@P`ALr@xAtHd@~ARv@~AxFrBfG|AxDbD~GXf@fAnBb@t@bCnDf@t@LR\\\\b@hA|A|EtFHJzDfDfDnCxAjA|@r@`@\\\\tCzBj@`@tDtCNNtCtBbF`E|ArA`D~CxA|AzBhCvAdBb@l@p@~@pPdT`FlGxHxJ`GtHZ`@rStWtAdBv@dAZ`@vIzKx@bAzCzDpJ~LvGzHpApAl@l@x@t@tAhA~CxBNH^Tp@^|@d@nAh@^Pj@Tp@V~@XtCx@lCl@~Bf@dB^dF~@|HbBhB^b@H~@R|EbAvCp@fGjA~K`Ct@NhE~@H@HBbDr@z@RzCj@b@JH@ND`@HJ@F@nB\\\\fB`@n@NhCj@b@HVFB@b@HVFb@HjAVNDhBd@NBPDB@hA`@hBr@LB`@T~A`Ar@h@fAz@z@v@z@x@dAnAx@dAr@`Ah@x@d@x@@DT`@Xf@FJt@`Bt@jBTj@Tl@BH?BDJ\\\\dABHDNRn@Lb@Rv@DTh@`CVtA\\\\fBTdBR`BRpBPzBN|BJdC^xJd@nOf@dPBj@Dv@v@|R@X@V@Tl@jODz@Bp@JnBPxBPbB@PVlBh@zCJ^Rz@b@bBh@bBt@rBf@fAl@jA^r@T`@\\\\h@DDtApB~@lAdAxA|@fAtBrCpA`Bn@v@|CbErCrDDFTZhAxAhAxAr@z@V\\\\xAjBl@x@zBvC|B~CvBvC~@lA\\\\d@f@p@tAjBX\\\\fAtAx@dArAjBv@bADDVZd@n@p@|@dArAfAxAz@fAz@jAPTbApAv@bAz@hAjBbCbB|B|@jAX^@Bx@dAz@dAxAjBnDpE`C~CfDfExDbFtCxD~@pANPJNz@hABDr@x@lAzAlBxB|BbDZb@DHzCxD\\\\d@dCbDn@x@jBdC|AnBZb@d@j@RXNPpCvDDDhC|CjA~Aj@p@hAxAtAfBX\\\\RXpA`BLRbAnAr@|@hA`Bh@r@RTv@fA|AnBdAtAr@z@h@r@n@|@DDFJfIhK\\\\`@xAlBTXRXPNRZZb@HJRTdAtAfB|BhAxAFFZb@bArAbBvBlA`Bd@l@Z`@RVHHfAtAdB~BV\\\\v@dA\\\\`@nBdC`BzBbEhFlEzFvGhIfAtAX^~AvB`@n@HHPPvH|J\\\\`@Z`@|ArBV`@v@`ArExFjF~Gd@n@`BvBbArAfBvBtD`FTZ\\\\`@hBzBd@l@|CbEzAlBlA|AtBlC|@lAr@|@vCtDpBhCJNpE`GfB|BnA~A~BzCVVt@dANPv@bAdC~CpBtC^`@JJf@p@JNHJvAlBf@n@\\\\`@VZj@n@l@p@bA~@lAhAXT|BzAfAl@NHvAl@^PVLj@RNFRFb@Nx@T|Ct@xAZdARb@JdARb@H|AZdATb@HxBb@d@HB?b@HxFjAtA^pDt@tAXb@H`@Jz@RzB`@vQtDhB^pDx@dARnDt@h@N|Dt@jBd@fATb@HdARb@HfCf@D@`@JtCl@TD`GjAbA\\\\r@PXHJ@j@JbAPlEj@@AvAR`AH\\\\@l@Bh@@n@?h@A@Af@CrBOj@Gl@Mh@Kj@Md@Oj@SNG`@SNGNI@?HGVKDCZMDCVKb@Wd@Q|@k@xAcAj@_@FEHG^W`@WJGHGTKTMJGJGr@e@PM~A_A`@UDAZQ^UDCz@e@rAm@|@]tBo@t@S^G\\\\K`@Gt@KrAMp@E~@A@?vCDvALXDj@HdATlAZRFNDn@Tt@ZB?x@b@f@V^Tr@b@z@n@PLjAbA~A|AbBnBhB~BhCvDFHZb@|DfGhBnCZd@pAnBXd@HJv@lANTfA`BHJn@~@v@fADF\\\\`@FJRT\\\\`@LP|@~@pAlApAbAd@ZjG~CdATdAVxD~@XFdIjBlHzAVFhLbCbDp@b@JzFlA~Bf@B?DA\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 51.90017049999999,\n" +
-                "                        \"lng\" : 20.8598399\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"24.8 km\",\n" +
-                "                        \"value\" : 24752\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"21 mins\",\n" +
-                "                        \"value\" : 1238\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.3194271,\n" +
-                "                        \"lng\" : 20.036596\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue onto \\u003cb\\u003eDK7\\u003c/b\\u003e\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"{hesHadezB~I`BdAPRDpDv@h@JpB^dAPb@HvFnA`@HbDt@l@NTD~@RJJzCv@v@PtAXvAJ^HH@D?V?`@FB?|@NHH~A`@pAZd@JlCb@JCfCf@ZFdCf@J@tCj@XDb@JfGlAt@NhB`@dDt@H@vCl@VFhCh@jAVlCj@hB\\\\dATb@Jb@HvNxCvDr@NBlB`@|@R`AVhB^bA^j@\\\\r@r@DD|@lArBzCdAfBtAzB|@tAbM~QhAfB|@pAXb@h@v@LPnAnBZb@bAzA~@tAPX`@l@BR@@t@jApAjB?@rAnB^l@^n@Xn@JRHVHVL^@HHZLp@Hf@BVD^Df@Bl@@P?T@P?|@Ad@?l@ErAGxAItAIbAEbA?B@RGx@Ep@?B?@KxACREt@?@C`@I~ACx@Cr@Cr@A|@AhAA`A?l@?^@b@@p@B`@Bb@D`@B`@BTBRHl@@DDb@DPBPF^FXJf@Lb@BLFNBJFNPb@HNHPLTLRNRV\\\\PTVXTVRPXVBBXTDBdAv@hBnAlCfBnBpA`@VPJpD`CdIlF^VNJrFrDfIlFn@d@zJfGpBpAvE~Cn@d@LFd@ZxA|@d@XJHhC`Bj@b@n@^DDr@^DBn@b@|@^\\\\Lz@Zb@N~@\\\\B@lDvAn@XpCfAjCdAt@ZpAn@`@R`@Rd@TfDjB^Th@X|ChBFBnF`D`@T^T`@TdDlBFNdC|AdEdCb@V~@h@@@^T`BbA`@V`@V~AbAbAl@~@l@^TvBtAnBlAnCdBrAz@lAl@FE\\\\RpAr@p@`@\\\\T@@pAt@f@XHF`@Tf@XXN`@TDBt@`@h@b@ZVPNPNj@p@FLNTHNLVJRTh@@Bd@vA?@^lAnB~GnArEL`@DLPj@?BTl@Vt@`@fAz@|AJLv@|@\\\\d@TZTXx@jATZHJFHVRz@rAvCpE^p@JRLRHRLTLXPj@V|@\\\\|APp@bApCZp@X^bIdJ\\\\`@Z^vNlPlAlAjBlA^V`@TdIjFbDtBFZ|A|@d@\\\\ZT@B@@XXJLb@j@z@xArAfCZf@~BhEJBXf@hAxBXf@Xf@Vf@p@pA|BhEXf@p@nAXf@Vf@jAxBTb@JVpCfFjDrGvEzIzKtSfCxEnEfId@z@tBbEr@nBTx@Px@Hp@Jv@PhBZ|E@f@@V@n@@zAChAKjAI~@Mz@YhBAHIj@c@nCu@nDw@lDe@jBAFQn@Qp@A@]`BAF[jBIjAEjAA~CB|@BdAJvAL|AN|ALlAVfBT`AH\\\\r@|C|@fEFX`@|Bb@rCf@|CHh@@HJt@XfBJt@p@rEJr@XhBJt@p@pELt@Jr@Jt@Jr@Lt@b@|CXfB`@vBh@bBN`@Z`ANb@DF\\\\l@DHb@n@f@h@BBDFFDfAbA`@ZpCrB^Zl@d@pB~A^XJHpB~AHFTPXVNP^b@j@x@PVT`@^z@^bA|@fCz@hC^jAZ|@|@jCJZzCvIATTl@Zn@T^DJ\\\\f@z@dA`@Z`@ZpAl@p@Vx@Pz@Fl@BFAlA@R@rBA~CBnEHpBFTAp@?b@?rCDb@?b@@nCBfJJjB@|FR?@@B?B@B@@@B@@@@@@@@@@@@B?@@@?@?B?@?@?@A@?@?@A@A@A@A@A@C@A?C@A@CzBMfE@T@b@?~@@nAD`@@jBJd@FPB~@HZD^FB?f@B`@BjD\\\\lAJj@FTD`@?B@\\\\D^Fl@Hr@JD?\\\\D^Df@Dj@@`@B\\\\?~B@jDCV?dGAjAAj@?XAN?P?|A?tEAHFlB@|@@lB?P?bA?fB?^?ZBj@@REb@Fh@H^Hl@Jf@Hl@Lh@Lp@Rp@Rr@V`A\\\\n@Zr@\\\\v@b@l@^d@X^XBBz@l@^\\\\^Z|@x@T\\\\DD~@fAnAzA~@tAZf@nBhDnA|BDDPVl@hAFJj@fAh@|@Xd@JPZd@X`@^`@RRPPZZf@d@b@\\\\JH\\\\Xd@XDDv@`@ZL\\\\Np@Vn@Rt@Th@LF@lANb@Dj@Dt@DV@`CJxBF|@D~DLX@tDNfEJxBJz@B|BA`BDbF\\\\pADzBJjELJ@b@@xFRvBF~AH|@Bd@@b@Bb@@lBFX@R@N@@?~FRl@?vADn@BxERP?zAFJ?f@Av@Kh@S@Af@UzAiAFEx@s@x@o@`A{@n@e@nAaAJK^Yb@WPIJGTIJE^M~Bu@b@M`@MNEJ?dA[`@MDC\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.4950178,\n" +
-                "                        \"lng\" : 20.1838456\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"32.4 km\",\n" +
-                "                        \"value\" : 32441\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"37 mins\",\n" +
-                "                        \"value\" : 2237\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.0863115,\n" +
-                "                        \"lng\" : 19.9547424\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Slight \\u003cb\\u003eleft\\u003c/b\\u003e to stay on \\u003cb\\u003eDK7\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-slight-left\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"m_crHwkhyBNWX_@LSTm@L_@d@uAXeAX}AR{@J]PWV]ROZM^KJ?D?V@LBTDnAp@l@Zt@`@bBz@b@LNDX@j@KbBe@~B}@B?\\\\[R_@Pm@\\\\_AT]ROPCR?HBNBPLXTt@r@ZPPBNAT@BAlA]n@Sd@O^Mh@MBA`@KZATAR?L?`@DXDb@LB@d@RlBt@j@PxE|AdDdAdFdBvFpBn@RzItCr@V|DvAnFjBfBl@fFdBzEzAfA^N@T@P?XEVITITKXQ^WZUb@c@v@s@PG|AaBtA{Av@s@n@m@^]NOLK\\\\]zAuAFIDIHWRWBE\\\\o@Zs@DKPo@FSH]Lo@@ALs@?CHq@@IFcADiBFuCBw@?CDsBJgBH]@G@IHs@Fq@Fe@F_@@CLaAFc@F[Pw@Jc@Nk@Lg@BKNg@BGPg@@EJYTi@\\\\}@\\\\u@\\\\s@BOLSJQf@u@NQv@cAfM_PjNqQDE`C{Cp@{@bEkFV[xHyJ~FsH\\\\c@Za@Za@Za@x@cAZa@tAgB~@mA~AqBtDwEtD{Er@{@rDyEpBiCn@u@BEXYf@g@vCuCtAuAjBgBlCiCnAkApCoClBmBn@o@vCsCpAoAd@c@pGmG`BaBvBuBbAaAf@i@|A{AhFgFlOcOvCuC|@{@nHiHzAyA~HwHzByBvCsCJKfAeAFGtDqDLO|@aANOPC`B{@jEDd@Kx@D^@bDJ`CL`@FTDTJRNRPRTJTJV?@JVDVBFHj@JtALpBBRB`@BRDZLf@L^HRJPV^j@f@hBh@`Bf@h@^d@N~A`@bEbAR?tBl@fD~@x@T~C|@PH\\\\NnBx@THdA`@PFB@B@L?BABAFC^c@HMFIFC@ANIN?XDZFb@HfAR`@HhB\\\\j@Lh@LrATlCf@rCf@\\\\HLDLFLJLNJLHLFPHR@FDNF\\\\@BDf@@LLnBDt@Fv@R~Cx@|LTtENrARvAJr@f@~BTdAh@pBBHx@jDj@hCh@|Bz@dDxAjGHZF\\\\dArETz@j@`Cz@tDvCdM~@vDd@pBX`AxAnGPp@`AdEPp@Np@rAvFNp@rAxFrAxFvDbPbAdENp@vFxUd@pBbAfENp@h@zBpArFlAbFJf@@BPt@nClLrA|Fj@vBZ~@N`@JVf@jAh@bApAnBnBlC|@lAdJbMxHhKZb@bLnOlAbB~F~HnBrCj@t@v@dAbAtAHJV`@hAvATZ`QpUtD`FbDrEtBpCV\\\\xErGjAvAX^RTVR`Ap@fBbAPL`@V`BdA^V@@|FpDfAp@@?~AfAt@f@tCnBHFt@f@`@VbDxBz@h@|@j@|@l@\\\\VTNzA`AtBtAbDtBb@ZbAl@JHr@b@^V^V|AbAvA`Aj@b@`@\\\\lApAnCxC|CpDhCtCJLdE|E~AhBtA~Af@f@fCxC\\\\^\\\\^\\\\\\\\dAhAz@dAz@dA@@j@p@LPZ^x@bA|@fAlAvAlAxAlCtCb@h@|BfCTVbCtCj@n@pB|Bd@d@v@l@bAt@z@n@^XbFrD\\\\V~C~BzC|BDB|ApARRLLLPRVh@|@Xj@JVRl@\\\\fATv@VjAT~@r@rDHx@FnCDbBD|B@z@D|@Dl@Fr@Lz@Lr@H^FRLd@Xp@Zp@T`@\\\\f@NRLLRNZXTJTLXNXHRDFBTBRDVBT?X?P@N?P?F?\\\\@jB@|@?n@?jA@z@?z@@Z@X?`@?TCPAXG`@GvAUbASBAvAWx@QVETERElAUzAYHC^IdBYnASjASbASbAQ^GTE^InAS~AY|@Ot@Of@I`@IR@h@Gr@MRE|@QREXE~AYt@Op@Mx@OPCHCHILCh@KNEb@Kd@S`@Q\\\\Ob@WZO~CoB^UHE\\\\WTIlAw@z@g@LIl@_@n@a@r@e@ZOh@_@d@Yb@UVIREVA`@@^?f@@p@?z@@jABfBBN?B?L@bA@V@l@@T@R@PDTDXNRLPLZ\\\\h@n@r@dAPTb@n@Xb@`@l@Xj@Xn@Tn@Rl@Nj@Lp@Jt@Ht@Ft@Bx@B|@BhBBnB@rB@jA@d@@h@BZJn@Lf@L\\\\PZTVPRPNVHl@HRAREVMRKRQb@k@l@u@n@}@l@s@TWNITKJCN?PAPBJBVNTRR\\\\JRLXZ~@V|@Hd@Ff@Bf@@f@Aj@Ed@Kj@Mr@Oj@Sv@Mb@GXI`@EXE`@AZA`@?N?P@VBRLp@Ld@Rd@LTRTXRVLb@NDFnBp@^JTFPDh@Pj@Ph@Rt@TrA^xA^lA^HC`AZHBbDbAnA^NDvA`@HBBH@?@@jA^|@Xp@RVFt@Rd@Nh@RbAZh@Nh@PbAX`AZFBv@THBt@T|@Xb@NZH\\\\J^J\\\\DVBH@PAd@IZK`@Sf@Ur@[TKz@a@p@[h@Wp@]j@Wr@]d@Qh@O^EVCd@DP@H@L?dAHz@Dv@Hh@D`BJb@Bv@HT@^Bb@Dl@Bb@Bj@B`@Dj@Bd@F|@Fn@Dv@Fz@FN@d@D`AF`CRH?pAHP@~@FJ?B?@?BCVFpFZP@ZBZDnALp@Bp@Dn@DL@\\\\@d@DN@T@\\\\?^AZC^En@W`@Of@Gr@Mj@C^AZC`@@X@h@AZJLBNHPFTHb@P@@d@P^TXPZPNHVH@@p@Pz@R~@LVBhAF`DVbEXpBNdAHbAFn@FJ@zAVpLdCxAZpAXVFbAT~A\\\\VFv@PlAVD@dB\\\\fB^vAZtAZj@JTFt@HtAXjAVtAX`@H@@dARb@JtAZp@N`B^tAVx@PNDp@NxAX|@RjDn@\\\\JRBz@Tl@J`ARTDrAVt@NhARvAZbAVJ@zCl@LDRDRJ`@^PLfAfAVTPPXZNNx@z@NLLP|@~@t@v@PPd@f@Z^tAxAJJ\\\\Zl@r@`@d@fAfAPPJXFJJPVXLPb@d@NPTTPTTXdAbA\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.3194271,\n" +
-                "                        \"lng\" : 20.036596\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"1.2 km\",\n" +
-                "                        \"value\" : 1229\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"2 mins\",\n" +
-                "                        \"value\" : 143\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.0763076,\n" +
-                "                        \"lng\" : 19.9474294\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Continue straight onto \\u003cb\\u003ealeja 29 Listopada\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"straight\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"mnupHclxxBZVLJLJ^Zj@`@v@l@LHj@^~AfAPJr@d@d@XXRB@|@n@hBlAh@Zz@f@VN^Rh@X~A|@bAp@|@l@x@f@ZRRLXPv@f@h@Z`@Zf@Zz@n@f@ZXTFBd@Z|@d@bDtBjAv@pAdA`Ar@\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.0863115,\n" +
-                "                        \"lng\" : 19.9547424\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"2.7 km\",\n" +
-                "                        \"value\" : 2660\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"5 mins\",\n" +
-                "                        \"value\" : 276\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.058043,\n" +
-                "                        \"lng\" : 19.9586896\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Turn \\u003cb\\u003eright\\u003c/b\\u003e onto \\u003cb\\u003eII obwodnica\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"}ospHm~vxBNXFLBF@DBH@D@BFf@@bD?b@?d@@H?D?D@DBF@BBBBBBBB@D?D?TC~AWnB]TGVIVKTKn@[XQLI\\\\Yn@m@d@e@FIx@{@NO`@c@f@k@h@i@p@s@PSd@g@^a@`@c@f@i@BCHGNOPKRK@AHETGRCRCj@EVATCt@Ed@E\\\\I\\\\KDC@?JGTORQHKHKT[Ra@Pc@Pi@BMRq@^{ANq@Ls@ViBFe@d@iE|@aIXuCh@oELiARs@L]NYNU@?FMFGFERKl@UfAe@fB}@f@WXOd@YPKRM`@URKTGNGPCjB_@lDs@b@Ib@GVAVAVAT?T@T@T@RDRBTF\\\\FfCn@bEdAj@L@@|Bp@VHTLFBNJTR\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.0763076,\n" +
-                "                        \"lng\" : 19.9474294\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.4 km\",\n" +
-                "                        \"value\" : 420\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 46\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.0545104,\n" +
-                "                        \"lng\" : 19.9595193\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"At \\u003cb\\u003eRondo Grzegórzeckie\\u003c/b\\u003e, take the \\u003cb\\u003e2nd\\u003c/b\\u003e exit onto \\u003cb\\u003eII obwodnica\\u003c/b\\u003e/\\u003cwbr/\\u003e\\u003cb\\u003eKotlarska\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"roundabout-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"w}opHydyxBVf@\\\\^HBH@H?JA@?FAFCFEFIDE@C@CBEDIDKHKDE@AHEHCt@EHAfAGl@CVCTG@AhCw@x@WtAa@\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.058043,\n" +
-                "                        \"lng\" : 19.9586896\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.1 km\",\n" +
-                "                        \"value\" : 120\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 14\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.0534544,\n" +
-                "                        \"lng\" : 19.9594705\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Take the exit toward \\u003cb\\u003ePodgórska\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"ramp-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"ugopH_jyxBx@MFAZ?ZA^?NBh@V\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.0545104,\n" +
-                "                        \"lng\" : 19.9595193\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"1.1 km\",\n" +
-                "                        \"value\" : 1096\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"3 mins\",\n" +
-                "                        \"value\" : 168\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.04741,\n" +
-                "                        \"lng\" : 19.9476126\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Turn \\u003cb\\u003eright\\u003c/b\\u003e onto \\u003cb\\u003ePodgórska\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"aaopHuiyxBPXPXLP@FHb@F^BH@FDPHb@jAxFh@zBJd@Ld@Ld@Vx@f@hA\\\\p@RT~@`Ap@d@^h@Zf@DFd@z@\\\\v@R`@Rj@Tp@Vr@LTFJJTVj@l@rAXn@Vh@fAfCHPN^p@xAv@dB`@~@^x@f@pAXv@Rz@\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.0534544,\n" +
-                "                        \"lng\" : 19.9594705\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.3 km\",\n" +
-                "                        \"value\" : 274\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 51\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.0496916,\n" +
-                "                        \"lng\" : 19.9461756\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Turn \\u003cb\\u003eright\\u003c/b\\u003e onto \\u003cb\\u003eGazowa\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"i{mpHq_wxBw@b@}@d@kDnBeDbB\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.04741,\n" +
-                "                        \"lng\" : 19.9476126\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"0.1 km\",\n" +
-                "                        \"value\" : 126\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 28\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.0493149,\n" +
-                "                        \"lng\" : 19.9445066\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Turn \\u003cb\\u003eleft\\u003c/b\\u003e onto \\u003cb\\u003eŚwiętego Wawrzyńca\\u003c/b\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-left\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"qinpHsvvxBjAlI\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.0496916,\n" +
-                "                        \"lng\" : 19.9461756\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                     \"distance\" : {\n" +
-                "                        \"text\" : \"39 m\",\n" +
-                "                        \"value\" : 39\n" +
-                "                     },\n" +
-                "                     \"duration\" : {\n" +
-                "                        \"text\" : \"1 min\",\n" +
-                "                        \"value\" : 10\n" +
-                "                     },\n" +
-                "                     \"end_location\" : {\n" +
-                "                        \"lat\" : 50.0496509,\n" +
-                "                        \"lng\" : 19.9443626\n" +
-                "                     },\n" +
-                "                     \"html_instructions\" : \"Turn \\u003cb\\u003eright\\u003c/b\\u003e onto \\u003cb\\u003eBożego Ciała\\u003c/b\\u003e\\u003cdiv style=\\\"font-size:0.9em\\\"\\u003eDestination will be on the right\\u003c/div\\u003e\",\n" +
-                "                     \"maneuver\" : \"turn-right\",\n" +
-                "                     \"polyline\" : {\n" +
-                "                        \"points\" : \"egnpHelvxBcA\\\\\"\n" +
-                "                     },\n" +
-                "                     \"start_location\" : {\n" +
-                "                        \"lat\" : 50.0493149,\n" +
-                "                        \"lng\" : 19.9445066\n" +
-                "                     },\n" +
-                "                     \"travel_mode\" : \"DRIVING\"\n" +
-                "                  }\n" +
-                "               ],\n" +
-                "               \"traffic_speed_entry\" : [],\n" +
-                "               \"via_waypoint\" : []\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"74 m\",\n" +
+                "                \"value\": 74\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 30\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2284848,\n" +
+                "                \"lng\": 21.0156871\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Head <b>south</b> toward <b>Żurawia</b>\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"__x}Hsqg_C`@SZMBABAB@@?@@BB@B@?@?f@S\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2291168,\n" +
+                "                \"lng\": 21.015462\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.1 km\",\n" +
+                "                \"value\": 120\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 46\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.228821,\n" +
+                "                \"lng\": 21.0173684\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Turn <b>left</b> onto <b>Żurawia</b>\",\n" +
+                "              \"maneuver\": \"turn-left\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"_{w}Hasg_Ca@_DGo@SeBEY\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2284848,\n" +
+                "                \"lng\": 21.0156871\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.2 km\",\n" +
+                "                \"value\": 224\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 72\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2307453,\n" +
+                "                \"lng\": 21.0163943\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Turn <b>left</b> at the 1st cross street onto <b>Krucza</b>\",\n" +
+                "              \"maneuver\": \"turn-left\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"c}w}Hq}g_CYHi@TgA`@WLYNsCjAo@V\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.228821,\n" +
+                "                \"lng\": 21.0173684\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.3 km\",\n" +
+                "                \"value\": 328\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 60\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2301315,\n" +
+                "                \"lng\": 21.0119668\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Turn <b>left</b> at the 2nd cross street onto <b>al. Jerozolimskie</b>/<wbr/><b>DW631</b>\",\n" +
+                "              \"maneuver\": \"turn-left\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"eix}Hmwg_C[JJ|@\\\\~BXtBn@fFDVFp@Hx@Dn@BZ@N?d@?R?V?X\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2307453,\n" +
+                "                \"lng\": 21.0163943\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.5 km\",\n" +
+                "                \"value\": 505\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 76\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2285204,\n" +
+                "                \"lng\": 21.0051058\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>1st</b> exit and stay on <b>al. Jerozolimskie</b>/<wbr/><b>DW631</b>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"iex}Hy{f_C?PAD@N@N@N@JBJBHBH@D@BBFHHJb@JVRp@Nn@F\\\\F\\\\N`Al@~Ef@~DRfBP|AJ~@L`AVhBJv@Fd@\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2301315,\n" +
+                "                \"lng\": 21.0119668\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.2 km\",\n" +
+                "                \"value\": 213\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 43\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2279632,\n" +
+                "                \"lng\": 21.0021163\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue straight to stay on <b>al. Jerozolimskie</b>/<wbr/><b>DW631</b>\",\n" +
+                "              \"maneuver\": \"straight\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"g{w}H}pe_CXbCb@lDDV@RBP@L?B?PBPHp@T|B\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2285204,\n" +
+                "                \"lng\": 21.0051058\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.5 km\",\n" +
+                "                \"value\": 458\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 67\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2265401,\n" +
+                "                \"lng\": 20.9958145\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>1st</b> exit and stay on <b>al. Jerozolimskie</b>/<wbr/><b>DW631</b>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"www}Hg~d_C@PBN@B@L@B@H@DBNBNBL?@P|@\\\\dBBLHb@Hr@t@vFBVd@nDRzAFj@Hr@p@nF\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2279632,\n" +
+                "                \"lng\": 21.0021163\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.6 km\",\n" +
+                "                \"value\": 630\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"2 mins\",\n" +
+                "                \"value\": 108\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2318387,\n" +
+                "                \"lng\": 20.99258\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Turn <b>right</b> onto <b>Żelazna</b>\",\n" +
+                "              \"maneuver\": \"turn-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"{nw}Hyvc_C_Bt@QHwCtASH]^yDpBUJ_FpCgB|@SLGDMFUFIDSH]P{@`@WN\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2265401,\n" +
+                "                \"lng\": 20.9958145\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.6 km\",\n" +
+                "                \"value\": 574\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"2 mins\",\n" +
+                "                \"value\": 95\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2306191,\n" +
+                "                \"lng\": 20.9846859\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Turn <b>left</b> onto <b>Prosta</b>/<wbr/><b>DW719</b>\",\n" +
+                "              \"maneuver\": \"turn-left\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"_px}Hsbc_Ca@VPjAT|AL`An@bFB\\\\B^JdBBh@@L@b@@PBT@PDX^`DBNHl@|@fH?B@FDb@B`@H~ABr@\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2318387,\n" +
+                "                \"lng\": 20.99258\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.5 km\",\n" +
+                "                \"value\": 537\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 70\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2293754,\n" +
+                "                \"lng\": 20.9771224\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At <b>rondo Daszyńskiego</b>, take the <b>1st</b> exit and stay on <b>Prosta</b>/<wbr/><b>DW719</b><div style=\\\"font-size:0.9em\\\">Continue to follow DW719</div>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"khx}Hiqa_C@X?T@N@L@H@HFXBNFZLp@Jh@ZdBHb@DTBR@BHl@Fl@@@LjATtBDf@Dh@D`ALtBDz@FjAF`AFxABjA?f@RjB\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2306191,\n" +
+                "                \"lng\": 20.9846859\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.2 km\",\n" +
+                "                \"value\": 201\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 17\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2291022,\n" +
+                "                \"lng\": 20.9742087\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue straight onto <b>Marcina Kasprzaka</b>/<wbr/><b>DW719</b>\",\n" +
+                "              \"maneuver\": \"straight\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"s`x}H_b`_CRfBBPF~AFtBF~BFtB\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2293754,\n" +
+                "                \"lng\": 20.9771224\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"4.1 km\",\n" +
+                "                \"value\": 4084\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"7 mins\",\n" +
+                "                \"value\": 437\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.22022,\n" +
+                "                \"lng\": 20.9166075\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue straight to stay on <b>Marcina Kasprzaka</b>/<wbr/><b>DW719</b><div style=\\\"font-size:0.9em\\\">Continue to follow DW719</div>\",\n" +
+                "              \"maneuver\": \"straight\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"{~w}Hyo__CDdBLlENnFBnAL|E?^@F?BAJ@nA@X?t@BlAJrC@ZBd@@\\\\Bl@?L@J@VD`BFlBFxAXnKJfEJfEBp@@V?X@X?hA@bB@p@?n@BdE?b@@^@d@BrAFdBFl@Db@DZDr@FlAJrCFxCD~BP|G@T@P@JDh@`@rEFn@T`CH~@H`AF~@H`AN`C`AvNv@|LH~@F`A@NJ`Bn@vIPdCN|AJ`ANjAX`BTpANn@VdAJf@Hd@Hf@RjARjA|AdIl@`Dl@`D\\\\dBTfABNj@rCNdAF\\\\F^n@jDd@|CXpBp@nERpAXfBXzBBJBLvAvJnAtINbARdBDXlAjINbAN|@\\\\pBNx@VvA\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2291022,\n" +
+                "                \"lng\": 20.9742087\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"1.4 km\",\n" +
+                "                \"value\": 1440\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"2 mins\",\n" +
+                "                \"value\": 132\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.21652599999999,\n" +
+                "                \"lng\": 20.8964564\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue onto <b>Połczyńska</b>\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"kgv}Hygt~BLz@t@dFb@~CRvAF^vBxN\\\\`Cd@zCDd@bAzGzBdOPhAJ~@PtAFr@BXJnADd@JfAFhAFfABj@Bb@PhFBdAD|@@XD|@H`AZpFB`@DlABp@DnA@j@@PBNBZ\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.22022,\n" +
+                "                \"lng\": 20.9166075\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"1.6 km\",\n" +
+                "                \"value\": 1598\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"2 mins\",\n" +
+                "                \"value\": 131\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2165432,\n" +
+                "                \"lng\": 20.8730592\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>2nd</b> exit and stay on <b>Połczyńska</b>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"ipu}H{ip~B?@A@?@CB?BA@AB?BAB?B?B?BAB?B@B?B?B@B?B@B?@?@@??@?@@??vA@~A?zAAxAAtD?Z@J@\\\\?L@`@?\\\\CNAX?^?^?Z?zA?d@?X?X?R?f@?ZBzE?nEAvLBlNAdC?n@AhC?dJ@v@?`@?jA?vC?pD@dBAlF?lA?vJ?lA?V?bA\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.21652599999999,\n" +
+                "                \"lng\": 20.8964564\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"13.7 km\",\n" +
+                "                \"value\": 13714\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"17 mins\",\n" +
+                "                \"value\": 1015\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2100737,\n" +
+                "                \"lng\": 20.6735202\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue onto <b>Poznańska</b>\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"kpu}Hswk~B?`BA`F?rB?lA@fA?z@DfBHlDNlHVzJ@b@@\\\\@TFfC?F?J@j@@N@n@@B@|@Bd@@\\\\@f@J|D@XD~AH`DB~@D`B?@JnEH`DJrENnFH|DHbDHjCPvKDxCNlGNbHHzB@ZZbJFhBDvABfBDfDFjADbAP~BBb@@FRbCFf@@RTnBBXB^PzBTlD^zD?BHr@N|AHhAR~BTlCN~ABZPtB\\\\rEPpB@RD^Bn@n@zHL|AP|BTbDZ~ENv@p@nHRhCJjAVxCBf@Fn@RxAh@lGN~Ab@fFXpCjArNrAdPH`AA\\\\?HLxAZfDFfA@rABnBE`DCpAEdFCj@G|GEnDEpGAx@APAfB?rDQzQEbDC|AA|BGrEA~@CbDElD?pAE~C?FA~AGtC?^Fp@ARCdDA~@ChC?FGnGIjJAr@MfNAjBCxCCtAIlBAlAAnAEdEGfGG|FCxCA|AC`FBj@EvDAtACn@ElBEhEAxBExCEpF?B?JF\\\\Cj@AdBCzDGxMErDCrFEhDCvA?VAxBIb@?Z?~CAvAAnAAvA?~@CvD@ZClC?dCI~JAdBEbHE|@EvBA`DAv@?XE`J?J?F@j@KrLA`BCjGKfAC`D?HEpGC`CA`DCbCCzFGvH?XClC?FClDCrDF~@ClCInMAvACbDCvDAbBCzCCpGI|HC|FEvFKvLCZ?p@MxIE`KDR?`@M~RCvE?DC~EAl@CpEGhIE`G?L?@?@Eb@CvB?lAAz@A`BAzD?P@L@J?n@CxAArCCbG?HCfA?d@Bd@BbAHx@FhAD`@Bd@j@rKd@~Hb@|G?DDr@@L@HFb@Dl@J`BZhF`@nH?^BVFtAV~DBl@\\\\`GJrBDf@Bp@BXf@jIHrAZdFFt@T|DL|BNbCXnEB^FnAJzADr@\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2165432,\n" +
+                "                \"lng\": 20.8730592\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"34.1 km\",\n" +
+                "                \"value\": 34145\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"33 mins\",\n" +
+                "                \"value\": 1956\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.2190945,\n" +
+                "                \"lng\": 20.2043716\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue onto <b>DK92</b>\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"}gt}Hoxd}Bn@bLHlABl@ZlFFfAJtAf@zIBTP~CRlDPlDNzBX`FJzAB^DLNdCNjCLnA?R?NV`EBr@Z~DDTPvA`@fC@D\\\\tBVjBf@pDf@tCdAfHHPLbA|A~J^jCx@vF@N?H|@~FdAdHr@lEl@dDDLjA~Hn@dEdB`LHh@pBlM@DD^V`BRpAXdBF\\\\ZtB@Fz@vF@Hp@fEXfBRpAp@lElApIZpBdBzKNz@@VZpBv@pFDThBnLN`ANdAZrB@Nf@~CHx@F`A@R@L?`BAp@SbNEvCErDEjCIbGG~CE|CAf@ItDMrJCpAAt@Av@CdAGxGAp@CxAAZAR?BAf@GlEGpDCz@GfECxC?H?D?PUbPGlFKnGOnKEfDAf@Ef@GfDAp@CdACnAE`ECzAAp@?P?P?F@LEzBEzBAr@GpEUbNGtDGvDEdDa@jZCFAD?FEhCC`BElB?^EtDEtB?L@H@D]xVADABAF?LQ|KKzGSrNObK?L?HBL]fSEdD?\\\\EdCEf@A\\\\ElBAx@MjICx@@nAGfEKzE?HAFAL?\\\\EvB?RAhBGrBEtCCtB?L?H@JKtGA~AEpBIbB]jHOxEWtFu@bQs@xPADGp@Cz@KtBg@|JcBh`@{@`UCb@GdBYtGQ~CMrCYhHKdCa@nI[zHInC?J?H@JItBg@tLi@hM[xG_A~RETKtBGlBC^w@hRGjAE`AI`B[nH}@~SUtFOfDEpAAJ@Tc@bLErAGzAEtA?BIxAGzAGzAG|AIzAG|AG~AI|AG~AI|AG~AEdAAXI~AG~AALCx@CTG~AG|AG|AI~AGzAC^E|@GxAGzAIxAGxAIzAGxAGxAIzAGzAGzAIzAGlA?NIbB?@?FMp@OdE_@vGKtDAN@N_AfXG^GnAOnCGjAGvAEdAAZC`@C|@G|AG|AG|AGzAAp@?R?Na@pJGtAGtAGtAGvAGvAGvAGtA?BIxAq@bPCn@En@OhDUvEOnDInBKjBAHG~@k@xMCVEnAEx@ATA`@AJA^GnAElAGjAEhAEdA?@GrAAh@Cf@GpAEnAGnAElAEfAG|AAZC\\\\Cz@Ex@Ez@Cv@?FSnDCr@AFARCn@EdAEhA?FE`AAREv@GlAElAGpAEnAGrAGpAGtAGtAGjA?HAPEdAGtAGvACj@Cj@GvAAh@En@GrAG|AEnAAFGxAGvAGxAIxAGxACn@Ex@EnAIzAG|AATE~@GtAE~@E`AC`AEv@?JEp@A^GnAIhBGfBIfBCb@E|@G|AG|ACj@Cp@GrA?FG|ACd@@B?B@DCn@I~AG~AG~AI~AG~AI~AG~AGzAIzAGzAAXEbAGzAIxAGzAG|AEpACDABADAL?DG`AMpCGbBA\\\\En@Al@ATGdAEtAADGzAGxAGlA?XBNEbAAHCf@Ah@Ej@Cl@G|AGzAGzAABGvAGzAGzAGxAE~@AZGzAIxAGxAEhAERCHCX?HCd@GrAGhA?JEfACXCr@ElAGvAIlBEhAIhBIxAG|AI|AG|AI~AGbBARCl@ATAf@C\\\\A\\\\Ct@AHGtAGxAGvAGzAGzAAPAXAN?N@RI~AG~AI~AG~AG~AG~A?@IxAG|AG|AG|AG|AG~AI|AG~AG|AI~AAd@C`@Cj@G|AI|AG|AGzAGzAGzAGzAGxAGzAI|AGzACl@Cn@EbAAXIzAI~AEfAEv@?NGhAEfAEhAI~AG|AG`BG~AI|AG~AG~AI~AG~AG~AI~AEhAEfAGfA?JE|@EfAI~AG|AI|AEbA?FIp@A\\\\U|EEdAEhAKlBEzAI|AG|AG|AG|AEj@?L?LBPAHA^Ez@G|AGzAI|AG~AG|AI`BEfAEfAGhAEhAEfAEhAEn@CFADAF_@lHEnAC^C|@E`AAXE|AAL@H@NEv@G|AGzAGxAIxAExAE|@AHCJAHAH?DKbCEx@El@A`@Cp@EtAGvAGrA?DGrAGvAGlAMxC[~He@vJ?@Bz@AJGrAGtAGrAGrAErAGrAIrAErAGrACh@Cj@GrAGtAIrAEtAAVE~@GtAGtAC`@Cr@GpAGpAGnAEnAARCHCLCNGvBO|DGnBYxGK`CEtAGtAGrAGtAGtAEdA?H@D@JGnAGvAARAVCh@ExAGvAGxAGvAGxAGxAGvAGxAGxAGxAEvAGxAGxAGxAGzAGxAGxAGxAaA`WE~@ERCLCV?HIvAIjBIbCMdCk@hMAXGzAIzAGvAGpAEnAGjAGfAEhAEdAGhA?HYzGCbAE`B?HGnAANGtAItAEfAANGrAGtAGtA?D?F@JE|@GtAEtAGtAGtAGvAEtAGvAGtAEdAAPGtA?LEhAAHEhAEnAElAGjAElAGlAEjAElAGjACx@APEjAElACf@Ct@AbAAVAlA?R?`A?p@?j@A^AX@jAB`A@\\\\BZ@b@F~@H~@Fj@Fn@Fh@ABABA@A@?BABA@?B?BAB?B?@?B?B?B?B@@?B?B@B?@@B@@@B?@@@@@@@@@@@@?B@@?@?@@@?BA@LRdAJf@VtA@@Lj@Rt@|@jCl@~AJRn@zAVf@Xf@nBxCz@bANRXVh@d@PH|@n@f@\\\\^Vf@\\\\h@ZbBbAzCfBjAr@bAl@`B`AdAn@bEdCp@`@p@`@fGtD`Al@NHNHxCfBnBnA^ThTbN^ZB@b@h@n@x@`@d@?@l@l@?@A@?BA@?@?BA@?@?B?@?B?@?@?B?@?B@@?B@@@@?B@@@@@@@@?@@@@@@@@@@?@@@?@?@?@?@??A@?@A?A@??A@AT\\\\HJDBRDFHt@rAl@tA^z@d@jAb@rAb@vATx@J^h@vBX`BJt@@FVlBv@xFJ~@lArJh@nE\\\\lCNlANfADf@NzADr@JlADx@DbABpA?@BpCAjCCdAA~@GhAGhAKzAKjAIt@WjBIj@Or@g@hCu@~Ce@jBu@zCsFlUGRc@hBc@hB_@vAcA`EqApEQr@K\\\\Oh@EPe@~AMn@W`Ag@dBGVQp@Sp@?@Qj@]dAKXYv@Wn@{@rBkB|DuB`FgAhCcA`CMXk@lA_@|@a@|@_@z@_@z@_@|@_@z@_@x@]z@_@x@]v@O\\\\MZ]v@g@fAe@fAe@fAc@bAc@dAc@`Aa@~@a@|@_@z@GLABkAnCaAtBk@pAKT]v@KPSZe@z@\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2100737,\n" +
+                "                \"lng\": 20.6735202\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"23.2 km\",\n" +
+                "                \"value\": 23213\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"18 mins\",\n" +
+                "                \"value\": 1098\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.1198816,\n" +
+                "                \"lng\": 19.9318262\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>3rd</b> exit and stay on <b>DK92</b>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"i`v}HidizBC?AAA?A?C?A@A?C?A@A?A@A@A@A@A@?BA@ABAB?@?B?@AB?@?B?@?B?@?B@@?B?@@B@B@B@B@@@B@@B@@@B@B@B?B@BA@?DAd@t@LJHN`@x@Vb@x@|At@xAt@zA~@nBdBtDvAvCrDvHhBxDhBvDf@hAd@bA`@v@v@xAl@tA`@x@x@fBf@bAFJ\\\\t@Vd@@DJ`@nAdCb@dAd@dAd@|@@BP`@R`@f@bAf@dA`@v@FL^t@^t@JLBDDDFBFL^t@^v@Xj@DH`@v@^v@`@v@^v@`@v@^v@`@x@`@v@^x@`@v@`@x@`@v@^v@`@v@`@x@^v@`@x@`@v@`@x@^v@`@x@`@v@^x@`@v@HPVd@^x@`@v@^v@Td@JR^v@`@v@`@v@LVP`@`@x@Vd@^|@j@nA^|@BDZp@\\\\r@Xh@DF^r@\\\\p@FLjBhD`@v@f@fAh@fAf@fAh@fA\\\\t@HNdClFTf@`AdB|A`DNZLVLVbBdDDFNJ@@Zn@\\\\t@^r@^t@\\\\t@^r@^t@\\\\r@Tb@HPXj@BH@?\\\\r@HNTd@^t@\\\\r@^t@^t@DHXj@^t@\\\\r@^t@^t@^t@^t@^t@^v@^t@^t@^t@^r@^v@^t@^t@^r@^t@^t@^t@^t@^t@^t@\\\\t@^t@Xj@DRXt@^t@T`@dApBlAlB`@j@?@^r@\\\\r@^t@^t@^t@`@v@^t@NZNXDHVh@\\\\p@Zr@\\\\r@HLRd@DDZp@b@x@`@x@`@x@`@x@`@x@`@v@`@x@^v@`@v@^v@DHNh@\\\\t@Xh@Td@d@|@Tb@JN~@z@d@\\\\f@\\\\d@VHDHDN@LH~AhApA|@b@\\\\B@h@^f@`@h@^h@`@h@^h@^h@\\\\h@\\\\h@^PLVNf@\\\\h@^h@\\\\h@^h@\\\\j@^h@^h@\\\\h@^j@^h@^\\\\TLHj@^`@XHFl@^j@^l@`@j@`@j@^@?l@`@j@`@@?j@^j@`@l@^j@`@j@^j@`@j@^j@^l@`@j@^j@^j@`@TNTNl@`@j@^l@`@j@^B@LTVRp@d@nAx@l@b@j@`@z@f@FBTBn@d@j@^j@`@l@^j@^j@^l@`@h@^j@`@B@f@\\\\j@^j@^j@`@j@^j@^j@^j@^h@^j@^j@^j@^j@^j@^j@^j@`@j@^`@XB@VZbAp@HD`@\\\\\\\\XJFRLrBvAJDLDR@f@^h@^LH\\\\Th@\\\\j@^h@\\\\fBlATNPJJFh@^h@^h@^`@VFDh@\\\\@@h@^j@^h@\\\\j@^h@^j@^j@^j@^h@^ZRNJh@^j@^h@\\\\h@^h@^h@^j@\\\\h@^h@^h@^h@`@f@d@HH\\\\\\\\d@h@f@j@d@l@b@n@PVPXb@p@Xh@FJ^t@\\\\v@^z@Pb@JVZ|@Z`ABLRp@VbAV`ATdAPbARdAPdANdAPdAPbAPdANdAPbAPdANdAPdAPfAPdAPdAPdAPfAPfAPdAPfAPfANfAPdA@BNbALp@BRPdAPdANdAPdAPdAPdAPfAPfAPfAPhAPfARhAPfAPfAPdANz@@JPdANdAPfANz@@HPfAPfAPfARfAPfAPhAPhAPfAPhARjARhAPjAF\\\\@D@ZRnA`@jCBTJj@r@rEHXHXLr@PfAPhAPhARhAPhARjAPhARjALx@DPPjARjAPhAPhAPhAPfAPfAPfAPdAPdAPdAPfAPdAPfAPdATzALt@DXF\\\\Hj@PjAPhARjAPhARjAPjARhAPjARjAPjARhAPhAPhAN~@BHHl@FZPfAPhARhAPhAPhARjAPjARjAPjARjARlARjAPlARjABLN|@PlARjAPjARlARjARlARlAPlARjARlAF`@Hh@RjAHj@F^RhAPjAPhAPfAPhAPfAPdAPdANdAPdA@DN~@NdAPdAPdAPdAPdAPdANdAPfAPdAPdAF`@?DB\\\\`@fCb@hDJj@PdAPfABHN|@BPDRHRBJPhAPfA@FFZHf@PhAPhAPjARhAPjAPjAHh@F^Jn@DVPhAPfAPhAPfAPdAPfANfAPdAPdAPdANdAPdAPdANfALt@BNHd@F^PfAPfAPhAPhAPhARjAPlARlABTNv@PnARlA@BJt@DRRlAPjAPjARhAPfANfAPbANbAPbANdAPbA?BN`APdAPdANbAPdAPdANdAPdAPdANdAPbA?@NbAPbATxATvAPlA@FRrATrARrARpATpARnARpADVF`@DVRpARrATrARtATtATvATvARlA@JTxAPbANdAHd@F\\\\BPJp@F\\\\Fd@PbANdAPbA@JLx@PdANdAH`@Fb@PfAPfAPfAPfAPfAPhAPhAPhAPhAPjARhANfAPfAPfAPbANdAPbANbANbATxATvATtARrAJl@Hf@RtATrARpAPfAPpAb@rC@FPfAPfAPhAPfARlARtALt@BPFb@Hf@RlAPjAPlARjAPlARjAPlARnARlAPnARnARnARpARpARnARpALv@DXRpARpADX@Dt@zEPjARrALt@F\\\\RrARrATtARrARrATtARtAF\\\\Lx@Nr@V|Ah@pDRhAL~@?@XrBJj@NbAHb@F^`@tCrDbVnA~HrAlIl@~Df@~CXdB`@bCTnBNfAb@vCHh@p@nERhANhAPdA@`@JfABh@BV@j@@J@j@?\\\\?VA^?BG`BMlGKdGAl@A\\\\G~E?X@ZI|FAxAGfDAt@AZKbFAn@?z@EzAG`BCdCk@t_@[bS?DEXChAG|BItG?D?n@IxDE|AM`FEdH@h@?BSpJYlT?dAAf@Af@OrICx@Ex@Ej@{@bLm@hHIhAOpBWdDa@jD_@jEQlB\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.2190945,\n" +
+                "                \"lng\": 20.2043716\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"4.0 km\",\n" +
+                "                \"value\": 3962\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"5 mins\",\n" +
+                "                \"value\": 275\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 52.08774829999999,\n" +
+                "                \"lng\": 19.9201118\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Turn <b>left</b> onto <b>Zamkowa</b>/<wbr/><b>DK14</b><div style=\\\"font-size:0.9em\\\">Continue to follow DK14</div>\",\n" +
+                "              \"maneuver\": \"turn-left\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"gtb}H}|sxBPFx@^@@ZNh@Z|Az@BBh@X^PLDv@Vx@Nx@H`ADxABN?|CFvIR~GN`BFvDBxB?lBD`AD^D`@H^Lj@Rp@^j@`@`@X\\\\^l@r@\\\\h@Zf@Xh@Vh@\\\\v@\\\\bANn@p@lC|BvIXlAJf@DZPv@n@pC|@vD`@nAb@lA^bA^|@LTNJ^n@^l@V^\\\\b@j@p@l@h@n@h@p@f@b@X@?d@Th@Th@Nz@P\\\\D^D`@D^@f@?f@AlAGjAGz@GtDYtDWjE[vDYxFa@`Kq@~BQp@Ej@AlBSJAp@E~E_@lD[vAKD?pBG\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.1198816,\n" +
+                "                \"lng\": 19.9318262\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"29.8 km\",\n" +
+                "                \"value\": 29762\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"26 mins\",\n" +
+                "                \"value\": 1542\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.9078268,\n" +
+                "                \"lng\": 19.6148152\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>2nd</b> exit onto <b>Prymasowska</b>/<wbr/><b>DK14</b><div style=\\\"font-size:0.9em\\\">Continue to follow DK14</div>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"mk||HusqxB@D?D@B?B@B@B@@@B@@@BB@@@@@B?@@@?B?@?B?@A@?BA@A@A@CBA@C@A?C@C@C?C@C?E@C?C?Iv@IP?ZA\\\\Av@BH?L@VBRDPBVFHDn@TtAz@fAv@hD`CjD~BfSnNdQvLHH`@\\\\f@\\\\~AhA@?lM`J~O|K|NfKbQ|LhChBpE~CdCdBnClBrE`DjD`CrCnB`FnDnCpBpFvDjBrAjCjBvDpCpIbGpGpEvBxATPfDbClAbA^f@JRn@nAx@nBlAzC~AzD~B|FPd@`@`A`BvDxBrFVj@tCdHhDpIVj@Tl@|DrJrAhDHL?BfCfG~@~BlHtQZz@dChGRd@z@vB`BfE\\\\v@N`@|EjLl@|AHRnExKvApDdAjCb@bAZx@|ArDfAjCh@rA`DxHTl@@BTf@Tl@~@|BzBpFdAhCfAlCjApCZv@`AbCbC~Fz@vBN\\\\N^f@lAdAfCfBlEDLDH^`ApBzE|@zBxAnDdApCvNz]|GnP|AxDfClG|FpNdBdEFPlOf_@fAtC|S~g@r@dBhHhQ~DzJbAbCb@pANf@Rv@FTXtALh@d@tBBLh@vCNx@z@hEbBrIJf@XtAv@~Dj@nCt@|D@XnAnGPv@Ln@J^f@`BFNTh@JPJJrCdGfAvBtCxFnCpF^r@tApC`BbDLV~AbDrGpM`AnBbHjNlAdCnDjH^r@`AlBXj@b@|@rEfJ|CfGVh@jA|BVh@jA|Bp@rAbBfDXh@p@rADHP^xC~F|EtJVh@Xf@Vh@zAxCpEzIVh@`AjBbGtLbBhDpFtKzFbL`AlBzGpNzGpN@BbDvGZl@vJzRlK`TXh@Vh@p@rAzIhQrGnMl@nAxElJFNtCzFXj@hFdKf@bAhAzBnCrFbCxEtApCr@tA`@j@V\\\\TTVPXPHD|FlDZRJHNTjA|@@BBDPRNRV^Z`@nBvBXRZf@NXJTP^FPDLLb@Hl@Jj@Fd@DZHlAD~@Bh@Dn@Bd@HvALdBFh@f@|MBz@Bx@ZjIR~EL|CNtDXvGVfHDx@HpBBn@X`HBj@Bx@Bf@?z@D`ARfG@JBz@HhARxCFx@H`AHl@HnA@NFx@LpB?FBZBTDbAV`DFv@?FDj@@VLx@Px@Rl@L`@d@jAf@bA`@v@lBnEbDlHVj@zEnKzB~E~D|I|DzI|AjDh@lAx@fBtA|CfGrNx@hBnFpLVh@xA~CjGdNl@vAtJjTrAxCv@dBl@tAv@hBp@|AL\\\\@Bx@bCn@bBRl@`@fAp@nBjAdD~BrGtA|Dv@vBTn@d@rAZz@~AnEtB~FPd@BFnArDHVbBxETn@tAxDjBhFh@|ATn@Pd@f@tAbGvPvAxD~BvGTn@zDvKFNhBjFXt@Tn@Rl@\\\\`Ad@nAVp@h@nAHLJLV`@TXTThA`Af@b@^Z~JhI\\\\X`FdEpBdBf@`@f@d@BBLJNNV\\\\DF\\\\l@RZ|AvCPZpNdY?@Vj@`@t@dBlDtDlHzAxCv@|AzBrEp@tANXxEjJ|D~H@@p@rAXh@Vh@jA|BrGhMl@hAdBfDVf@LTJR@BXf@d@z@dApB`AjB~@lBdFnK|BpElEzIrGfMFXV|@\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 52.08774829999999,\n" +
+                "                \"lng\": 19.9201118\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"3.6 km\",\n" +
+                "                \"value\": 3586\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"5 mins\",\n" +
+                "                \"value\": 279\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.8828961,\n" +
+                "                \"lng\": 19.5829331\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>2nd</b> exit onto <b>Warszawska</b>/<wbr/><b>DK14</b><div style=\\\"font-size:0.9em\\\">Continue to follow DK14</div>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"}fy{Hs_vvB?BAB?D?B?B?B?D?B?B@D?B@B?BBB?B@BB@@@@B@@@?B@B@@?@@B?@AB?@?@A@ABAf@v@LTlChFh@bAXh@t@zA|@dBrAjCxCbGr@zAfAtB`@x@r@xAv@`BnAfCnBrDbA|AjBvCT\\\\nDjFTh@b@p@tB|Cl@v@l@n@d@`@\\\\RJJr@v@nA|AfCzCnAzA`AfAdLpMfFvF|AdBzA~Ah@j@HJLV|BrCd@j@f@j@tDdEt@f@xCxD`ClCRTf@j@vCdDpBxBdBnBzBfCrBzBdFbF`A|@zAnALRJLFPDJBNDV@N?TAVCPIb@\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.9078268,\n" +
+                "                \"lng\": 19.6148152\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.8 km\",\n" +
+                "                \"value\": 773\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 65\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.8771,\n" +
+                "                \"lng\": 19.578054\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>3rd</b> exit onto <b>DK1</b>/<wbr/><b>DK14</b>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"ckt{HixovBA?A@A?A@?@A?A@?@A@A@?@A@?@?BA@?@?@?BA@?@?B?@?@?B?@@@?B?@@@?@?B@B@@?@@?@@?@@@@?@@@@@?@?@@B?@?@A@?@A@?@A?A@A@??A@A@CvBDx@TZJVFNBFBHDVLVLTPTPXV^\\\\bA`AjDbD^\\\\pClCp@n@f@d@@FBBFHPNZ\\\\XXdAjA^b@JLHP\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.8828961,\n" +
+                "                \"lng\": 19.5829331\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"11.2 km\",\n" +
+                "                \"value\": 11160\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"10 mins\",\n" +
+                "                \"value\": 621\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.7994992,\n" +
+                "                \"lng\": 19.487869\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"At the roundabout, take the <b>2nd</b> exit and stay on <b>DK1</b>/<wbr/><b>DK14</b>\",\n" +
+                "              \"maneuver\": \"roundabout-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"{fs{HyynvB?D?F?D@F@D?DBD@D?@@BBBBDBBFBB@B?B@BAD?BABABCBC@AD@D@B@FD`Av@~@t@h@b@TPJBxApA^Z`DfC|DzCRN~BfBtDrChBvA`BnAVRfGvE\\\\XpDpCJFdE~CbDdCn@d@x@h@nAx@FBXPb@TfAh@z@`@j@Rn@TbBl@^NXHv@XnA`@zDlAl@TZJ\\\\Lj@RbBj@nDhAbCx@fA\\\\bDdAVHJJtBr@~E~AV@nBn@fBl@hBj@rFfB`@N`@LpGtBhA^|@XtDlA`@L\\\\J|HhC`@L|Bt@xDnA|E~Av@TrAd@bAZbA`@\\\\NTLNHRLVNVRPNr@l@v@~@h@r@Zf@RZR^b@|@f@nAx@xBX|@l@dBJXpCvIv@|BfCnHdA~C`@lA@@L`@?@LZ`CjH`@jA|@lCvAfE~CrJjBpFrAzDX|@L\\\\@FVt@xDjLzBvGxAjE|DrLtAdEn@hB~@rChAfDNf@Rh@~@pC^jAPf@vBnGvAjElDhKhAdDdA|Cf@bBrDvKDJtAbEhAfD~@pC`@jA\\\\fAN`@HVVr@|AvE|@lCvBtGjBrFzDhL?@`B|EDL|ArEDP~B~GL\\\\Tj@NZ\\\\j@Zh@X\\\\ZVXVLHRLTJRH^NVFbBb@dAXzA`@`AVf@Nb@JbEfA~@VpD`AHBhBb@bBd@hAXhCp@jCr@zCx@RDlCr@b@LVHb@PPJTLZTLJJLLLLNDFJNLPd@|@n@nA^x@~AbD`@v@P`@`@t@\\\\r@JPT`@RZXf@Zf@PTd@r@j@v@r@bAb@l@HNtC`En@`APVNXZh@LVLVLVL\\\\|@lBlAlCf@jABD^v@HRHPBRn@xAN\\\\HTPl@Tx@Pf@Vr@f@lAh@fAb@p@PZ\\\\^z@t@JHl@^\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.8771,\n" +
+                "                \"lng\": 19.578054\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"2.4 km\",\n" +
+                "                \"value\": 2353\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"5 mins\",\n" +
+                "                \"value\": 271\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.7794503,\n" +
+                "                \"lng\": 19.4812019\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue straight onto <b>Strykowska</b>/<wbr/><b>DK14</b>/<wbr/><b>DK72</b><div style=\\\"font-size:0.9em\\\">Continue to follow DK14</div>\",\n" +
+                "              \"maneuver\": \"straight\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"{ad{Hef}uBd@PFBF@@@l@RDBf@Ff@@f@Al@ErBSnI}@`CWfKaAp@EH?lBNRDj@Xj@`@b@b@LNj@d@~@~@HDl@f@\\\\VtFvEtAhABBrDxC|AnA\\\\Zt@n@x@l@l@XB@ZN\\\\Ph@Rl@Pb@H~@LdADjGPlEJvBF|@@v@@l@J`A\\\\tAr@rC`D\\\\b@TVJN\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.7994992,\n" +
+                "                \"lng\": 19.487869\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"2.0 km\",\n" +
+                "                \"value\": 2005\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"4 mins\",\n" +
+                "                \"value\": 229\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.761625,\n" +
+                "                \"lng\": 19.4848506\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Slight <b>left</b> onto <b>Dr. Stefana Kopcińskiego</b>/<wbr/><b>rondo Solidarności</b>/<wbr/><b>DK14</b><div style=\\\"font-size:0.9em\\\">Continue to follow Dr. Stefana Kopcińskiego/<wbr/>DK14</div>\",\n" +
+                "              \"maneuver\": \"turn-slight-left\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"qd`{Ho|{uBXL@?FBLDZ@D?@@DAVCHATMVUBAj@_@d@O\\\\CVGTCvBWdC[hAOb@ElC_@l@GLAVEhBWlAUzASB?n@GXCJAD?B?FAb@A\\\\Et@Kt@K^EzEk@jAOhBULC`Fi@j@G`@GXC`AMBA@?FATCXEdAMnDm@`@E`@GZARAL?rBEb@Cn@IVCjFs@`@Gj@G@?l@EnAMnASREPEPG\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.7794503,\n" +
+                "                \"lng\": 19.4812019\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"1.2 km\",\n" +
+                "                \"value\": 1182\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"2 mins\",\n" +
+                "                \"value\": 130\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.7603151,\n" +
+                "                \"lng\": 19.4678275\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Turn <b>right</b> onto <b>al. Marszałka Józefa Piłsudskiego</b>\",\n" +
+                "              \"maneuver\": \"turn-right\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"cu|zHis|uBFdAFz@B`@HpDJjBBdAB|@Dr@JxADn@BTFxANfEDvABnADjABdBDdEBtAFhEDfBHnBLrCBx@?DNzDBx@@VJnCFzADn@DlAP|FLlD\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.761625,\n" +
+                "                \"lng\": 19.4848506\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.6 km\",\n" +
+                "                \"value\": 617\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 52\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.75947,\n" +
+                "                \"lng\": 19.4589865\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Slight <b>left</b> to stay on <b>al. Marszałka Józefa Piłsudskiego</b>\",\n" +
+                "              \"maneuver\": \"turn-slight-left\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"_m|zH}hyuB@@R~@XdFl@dOHrB`AdY\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.7603151,\n" +
+                "                \"lng\": 19.4678275\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"distance\": {\n" +
+                "                \"text\": \"0.2 km\",\n" +
+                "                \"value\": 208\n" +
+                "              },\n" +
+                "              \"duration\": {\n" +
+                "                \"text\": \"1 min\",\n" +
+                "                \"value\": 17\n" +
+                "              },\n" +
+                "              \"end_location\": {\n" +
+                "                \"lat\": 51.7592212,\n" +
+                "                \"lng\": 19.4559892\n" +
+                "              },\n" +
+                "              \"html_instructions\": \"Continue onto <b>aleja Adama Mickiewicza</b>\",\n" +
+                "              \"polyline\": {\n" +
+                "                \"points\": \"ug|zHuqwuBf@dNHpB\"\n" +
+                "              },\n" +
+                "              \"start_location\": {\n" +
+                "                \"lat\": 51.75947,\n" +
+                "                \"lng\": 19.4589865\n" +
+                "              },\n" +
+                "              \"travel_mode\": \"DRIVING\"\n" +
                 "            }\n" +
-                "         ],\n" +
-                "         \"overview_polyline\" : {\n" +
-                "            \"points\" : \"apy}Hy~g_C~I|w@fWeM~IpB|Gnj@tMfcA~VnwAb]|{A~f@zoA``ChaEbsAdb@rz@p]jmAxz@|r@hbAvt@xk@`l@zWz\\\\Kd_AubAzTaGx^tHfpCbx@ffDj`AhuI|uCjj@xQnVwHnh@uKjeA`|@~U]hbCgo@pnAcYphCao@zb@sTlq@{InVuBhNtGhc@hRzeAjDvt@~X`Zy@lXg\\\\hc@o_Axs@ig@x`EkfAr|FywAnpModEbzBy}@vuA_~AjfBkiBdZaNbZlIr}@xWxiBy_At`EieCzg@eu@~w@q~Azv@mYzkAyvCznA{yC|d@o`@zW}Gt_A`I`jAj]fkAzx@rsAdkAfk@dm@~cBzgAtb@tRh`A|Hz|AnN`pB|[|s@bYnc@tDzoBr`@b{@dL|q@sD~}@cDlp@bDzd@}M~}@nC`~@j`A|sAttBf`AthB`~@`bCdbCdoGxx@tnCbb@xm@~qBz[jlCv~@xwDrIxe@vS`]l_@tt@tkAle@j]lm@{C~y@{~@xj@gWtYrC~h@lf@|s@r`@|hCkGj_@`A`|@dd@p~A|~@|]tItXkE|t@bNztAdZ`ZpW`eA~|Bt|AljEnw@xoAdqBfhEld@`dAzGrv@`Mvh@jc@fv@r{@hkCnhAttFhn@~uBxi@jeErSjfBpZ`gAxc@~l@|Y~Qlv@pYvmA`e@pr@xd@nh@ftApb@pd@l_AhxAhj@zh@bSEnVqOdg@oeAxk@wXz_@tGteAbl@d{@~y@`o@bTty@Edm@n_@`j@vaAtCtsB~VrkAvXbXvn@d]~t@{Cho@^~o@tUh`@nWte@fq@v^hpAtR~oAp]z_A|r@hn@dtCleDbmBxa@vUdGhVxX~R`eCvKvh@l`@ph@v|@`kApaCn}CtjDroEbr@p`@vbBl]~q@fAdc@aUjYd@t[|YzVd_@xbA|\\\\`lA|UlcBf]h|@rlAPdf@lBdd@brAv~@rbCpsAnZjl@tz@ljAj_@|_@hV~c@vl@|vAgH`g@f@|d@zLpt@rIb^lUfRrRhg@zUdJnt@bB|`BrCri@jUza@|c@z}A|Fj`@gApS_M`KoPrOjBx^eIpzAf`@tWsh@fJud@zmBgbClzB{wBtZ`B`EfQpo@nNnXvGnEri@rr@txCb\\\\xsA``ArrAhu@f_Axc@rYhhArdAz~@p~@|Pds@fvAaOrd@wRlPlAdKdVnCjYtLeHtB`_@le@bRvg@`Gxi@o@ri@rBzvBd]hp@nTda@z`@vp@rb@tBnLrKeBxZ}SzQmu@`R}H|XhA~NdB|ScCpGzVlZjr@cIfQcA\\\\\"\n" +
-                "         },\n" +
-                "         \"summary\" : \"S7 and DK7\",\n" +
-                "         \"warnings\" : [],\n" +
-                "         \"waypoint_order\" : []\n" +
-                "      }\n" +
-                "   ],\n" +
-                "   \"status\" : \"OK\"\n" +
-                "}\n";
+                "          ],\n" +
+                "          \"traffic_speed_entry\": [\n" +
+                "            \n" +
+                "          ],\n" +
+                "          \"via_waypoint\": [\n" +
+                "            \n" +
+                "          ]\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"overview_polyline\": {\n" +
+                "        \"points\": \"__x}Hsqg_CpA]DBf@Si@oEY_CcA^mGjCkAb@h@|DvAfLT`GLhB`ArCjDrWtD~[bB`KrBzOP~Ap@nF_Bt@iD~Aq@h@wOlIwDfBy@f@f@hDdAbJ`@tGvBxQVtFxA`IbA~Iz@pQjAxUv@|Zv@vZhApp@jCbk@bInhA`Ljm@tNd_AlObdA`Gtb@fAhSvAlZMh@F|\\\\BffCdEbfBdDpnArEdi@fUnpCEpWk@bt@m@`v@}BxjC_BtcCeA`rAaApaBmA|}BbM`wBrMdxBnc@fuCvRvpAxBzPo@`j@gAvs@oBpsAsDfkCuDxaC[vWcEt_AkKfeCmOtrDsFdpAcEn`AsBxi@cHx_BuDh}@{JzbCaJ|uBwKhlCyLltCyKvkCeFlsAoI`qBmD||@aAd]F~If@pHGt@Z`@bArEzFlOtEhG`D|BbR`LvUpNr]pTvB`CjA`BATNb@TDj@d@~BxDlCrHbExUvEj`@b@pRoAbRoMrj@kHzXgDdMuGfPiShe@sPz_@iCxDQh@Tn@`Av@vH|N|]zt@zLhWbKbSd]xr@p|@`gBlM|WrMnVhMhW~DrIbFlDhSnNrQxLlc@fZxS|MxT`OvFfErGzDxOhKzQ|LnIdGbFlG`ElIfDnMzG~a@pN~|@|OdbAda@bgCt\\\\rvBh~@f_Gzm@z}DzDbXZlHeAdr@mCz_BeAxv@W|MuBrXsAlOq@xHjAf@dDhBzAt@lFv@~Q^d\\\\v@hDbBjCvCjBrD|ExQpFpTrEdIzDlDtBdAtHr@jdAiH|Jo@BRPVh@OFa@dBUlBBtATvEnCvu@xh@f{Bd~Ajh@f_@tMvZpl@txAne@|jAnxA~nD~z@`uBjCtHtAjGzHz`@fG`Zvn@toAxd@v~@xv@n|AxrAvmCrWfh@fBpB|HxEfDnDvFvHfAzIxA`[bEbgAbCfb@zAfMbSbd@xdAv~BhIlSvMd_@|Xpw@~^pcApa@h^`i@feAdb@hy@t_@jv@T|A\\\\r@RC~JdRfQ~]tSl\\\\dm@fq@xEbGfOtPzStUnL`MIjCQ\\\\Dj@XJJGzBA|Bl@fD~B`OrNjE`FHr@z@LtYzT|ZzUhRzMtLvErThHvu@nV`o@`TtA`ApDhE`G`O|_@hjAhdAb}C|]~dAnBjCpAz@zLhDnl@xO~BnBbHfNhQhXrK`VpE`LrEpD|@ZdD@l]kD|DNlHbGrUrR`HzCzZhAvCpApDdE|@t@`BDnEeBlQyBhXcDd\\\\eE~Hc@|OqBb@MN`C\\\\dK|@jSjBls@j@hP|AlX|Bpo@\"\n" +
+                "      },\n" +
+                "      \"summary\": \"DK92 and DK14\",\n" +
+                "      \"warnings\": [\n" +
+                "        \n" +
+                "      ],\n" +
+                "      \"waypoint_order\": [\n" +
+                "        \n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"status\": \"OK\"\n" +
+                "}";
     }
 }

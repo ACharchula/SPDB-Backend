@@ -6,7 +6,9 @@ public class Leg {
     private TextValue distance;
     private TextValue duration;
     private Location start_location;
+    private String start_address;
     private Location end_location;
+    private String end_address;
     private List<Step> steps;
 
     public TextValue getDistance() {
@@ -47,5 +49,21 @@ public class Leg {
 
     public void setSteps(List<Step> steps) {
         this.steps = steps;
+    }
+
+    public String getStart_address() {
+        return start_address;
+    }
+
+    public void setStart_address(String start_address) {
+        this.start_address = start_address;
+    }
+
+    public String getEnd_address() {
+        return end_address;
+    }
+
+    public void setEnd_address(String end_address) {
+        this.end_address = end_address;
     }
 }

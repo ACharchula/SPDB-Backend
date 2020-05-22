@@ -31,7 +31,7 @@ public class PoiFinder {
         Map<String, Venue> venues = new HashMap<>();
 
         for (Location location : locations) {
-            PoiResponse poiResponse = placesService.getRecommendations(location.getLat(), location.getLng(), radius, null, 50);
+            PoiResponse poiResponse = placesService.getRecommendations(location.getLat(), location.getLng(), radius, null, 10);
             List<Result> results = poiResponse.getResponse().getGroup().getResults();
             for (Result result : results) {
                 Venue venue = result.getVenue();

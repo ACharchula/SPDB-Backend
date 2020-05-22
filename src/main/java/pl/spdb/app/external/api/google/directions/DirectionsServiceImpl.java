@@ -13,10 +13,9 @@ import java.util.Map;
 public class DirectionsServiceImpl implements DirectionsService {
 
     private final static String url = "https://maps.googleapis.com/maps/api/directions/json?" +
-            "origin={origin}&destination={destination}&key={key}";
+            "origin={origin}&destination={destination}&key={key}&avoid=highways"; //TODO make sure that avoiding highways is also on frontend
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final Gson gson = new Gson();
 
     //https://developers.google.com/maps/documentation/directions/intro
     //origin        — The address, textual latitude/longitude value, or place ID from which you wish to calculate directions
@@ -26,7 +25,6 @@ public class DirectionsServiceImpl implements DirectionsService {
     //                The options for the destination parameter are the same as for the origin parameter, described above.
 
 
-    //TODO avoid highway???
     @Override
     public Routes getRoute(String origin, String destination) {
         Map<String, String> params = new HashMap<>();
@@ -34,7 +32,6 @@ public class DirectionsServiceImpl implements DirectionsService {
         params.put("destination", destination);
         params.put("key", ApiKeyProvider.google_api_key);
 
-        String json = restTemplate.getForObject(url, String.class, params);
-        return gson.fromJson(json, Routes.class);
+        return restTemplate.getForObject(url, Routes.class, params);
     }
 }

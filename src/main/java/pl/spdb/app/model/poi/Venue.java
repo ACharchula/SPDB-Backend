@@ -39,4 +39,8 @@ public class Venue {
     public void setRating(Rating rating) {
         this.rating = rating;
     }
+
+    public String getLatitudeAndLongitude() {
+        return location.getLat() + "," + location.getLng();
+    }
 }

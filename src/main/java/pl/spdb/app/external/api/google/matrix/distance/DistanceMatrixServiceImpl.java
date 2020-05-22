@@ -3,6 +3,7 @@ package pl.spdb.app.external.api.google.matrix.distance;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.spdb.app.external.api.ApiKeyProvider;
+import pl.spdb.app.model.matrix.Rows;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Map;
 public class DistanceMatrixServiceImpl implements DistanceMatrixService {
 
     private static final String url = "https://maps.googleapis.com/maps/api/distancematrix/json?" +
-            "origins={origins}&destinations={destinations}&key={key}";
+            "origins={origins}&destinations={destinations}&key={key}&avoid=highways";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -26,12 +27,12 @@ public class DistanceMatrixServiceImpl implements DistanceMatrixService {
     //               The options for the destinations parameter are the same as for the origins parameter, described above.
 
     @Override
-    public String getDistanceMatrix(List<String> origins, List<String> destinations) {
+    public Rows getDistanceMatrix(List<String> origins, List<String> destinations) {
         Map<String, String> params = new HashMap<>();
         params.put("origins", String.join("|", origins)); //multiple origins and dest divided by '|'
         params.put("destinations", String.join("|", destinations));
         params.put("key", ApiKeyProvider.google_api_key);
 
-        return restTemplate.getForObject(url, String.class, params);
+        return restTemplate.getForObject(url, Rows.class, params);
     }
 }

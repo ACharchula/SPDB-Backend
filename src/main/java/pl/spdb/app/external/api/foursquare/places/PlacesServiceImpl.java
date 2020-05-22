@@ -14,7 +14,6 @@ import java.util.Map;
 public class PlacesServiceImpl implements PlacesService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final Gson gson = new Gson();
 
     private final static String find_poi_url = "https://api.foursquare.com/v2/search/recommendations?" +
             "client_id={client_id}&client_secret={client_secret}&v={version}";
@@ -59,8 +58,7 @@ public class PlacesServiceImpl implements PlacesService {
         if (localDay != null && localDay > 0 && localDay <= 7) url = addLocalDay(localDay, url, params);
         if (localTime != null) url = addLocalTime(localTime, url, params);
 
-        String json = restTemplate.getForObject(url, String.class, params);
-        return gson.fromJson(json, PoiResponse.class);
+        return restTemplate.getForObject(url, PoiResponse.class, params);
     }
 
     @Override
