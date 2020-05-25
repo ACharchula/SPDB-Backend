@@ -7,6 +7,7 @@ import pl.spdb.app.algorithm.helpers.PoiFinder;
 import pl.spdb.app.algorithm.helpers.RatingProvider;
 import pl.spdb.app.external.api.foursquare.places.PlacesService;
 import pl.spdb.app.external.api.google.matrix.distance.DistanceMatrixService;
+import pl.spdb.app.model.api.FinalResult;
 import pl.spdb.app.model.graph.Graph;
 import pl.spdb.app.model.poi.Venue;
 import pl.spdb.app.model.poi.VenueLocation;
@@ -33,7 +34,9 @@ public class WaypointFinder {
     }
 
     //TODO add restrictions
-    public List<Venue> findWaypoints(Routes routes) {
+    public FinalResult findWaypoints(Routes routes) {
+        long maxWydluzenieCzasu = 7200; //in sec TODO
+        long maxWydluzenieDrogi = 100000; //in meters TODO
         //when no waypoints are specified there is only one route and leg
         Leg leg = routes.getRoutes().get(0).getLegs().get(0);
         List<Venue> venues = poiFinder.findPointsOfInterest(leg);
@@ -49,7 +52,13 @@ public class WaypointFinder {
         venues.add(end);
 
         Graph graph = graphCreator.create(venues);
-        List<Venue> result = Algorithm.run(graph);
-        return venues;
+        FinalResult finalResult = Algorithm.run(graph, "START", "END", 600,
+                leg.getDuration().getValue() + maxWydluzenieCzasu, leg.getDistance().getValue() + maxWydluzenieDrogi);
+
+        if (finalResult != null) {
+            finalResult.setOriginal_distance(leg.getDistance().getValue());
+            finalResult.setOriginal_duration(leg.getDuration().getValue());
+        }
+        return finalResult;
     }
 }

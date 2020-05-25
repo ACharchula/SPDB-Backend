@@ -9,6 +9,10 @@ public class VenueLocation extends Location {
 
     private List<String> formattedAddress;
 
+    public VenueLocation() {
+        super();
+    }
+
     public VenueLocation(double lat, double lng) {
         super(lat, lng);
     }

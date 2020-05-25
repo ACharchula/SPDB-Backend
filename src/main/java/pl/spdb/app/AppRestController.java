@@ -21,12 +21,17 @@ public class AppRestController {
     @Autowired
     WaypointFinder waypointFinder;
 
-    @GetMapping("/dev/test")
+    @GetMapping("/dev/test") //MOCKED DISTANCE MATRIX API
     public @ResponseBody String testing() {
         String json = getRoute();
         Gson gson = new Gson();
         Routes routes = gson.fromJson(json, Routes.class);
         return gson.toJson(waypointFinder.findWaypoints(routes));
+    }
+
+    @GetMapping("/dev/mocked_result")
+    public @ResponseBody String testing2() {
+        return getFinalResult();
     }
 
     @GetMapping("/api/categories")
@@ -753,6 +758,160 @@ public class AppRestController {
                 "    }\n" +
                 "  ],\n" +
                 "  \"status\": \"OK\"\n" +
+                "}";
+    }
+
+    private String getFinalResult() {
+        return "{\n" +
+                "  \"waypoints\": [\n" +
+                "    {\n" +
+                "      \"id\": \"4cb048da1463a1435f779ba9\",\n" +
+                "      \"name\": \"Dom Urodzenia Fryderyka Chopina w Żelazowej Woli\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"Żelazowa Wola 15\",\n" +
+                "          \"96-503 Sochaczew\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 52.258019719126395,\n" +
+                "        \"lng\": 20.310273957020996\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"4cb048da1463a1435f779ba9\",\n" +
+                "        \"avg_rating\": 5,\n" +
+                "        \"number_of_ratings\": 330\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": \"4c487a5796abd13a6d767401\",\n" +
+                "      \"name\": \"Muzeum kolejki waskotorowej\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"ul. Towarowa\",\n" +
+                "          \"96-500 Sochaczew\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 52.220529477379316,\n" +
+                "        \"lng\": 20.23335939093059\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"4c487a5796abd13a6d767401\",\n" +
+                "        \"avg_rating\": 3,\n" +
+                "        \"number_of_ratings\": 718\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": \"4c5d59546ebe2d7f407fd22e\",\n" +
+                "      \"name\": \"Pałac w Nieborowie\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"Nieborów\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 52.067975859823065,\n" +
+                "        \"lng\": 20.069862700908168\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"4c5d59546ebe2d7f407fd22e\",\n" +
+                "        \"avg_rating\": 4,\n" +
+                "        \"number_of_ratings\": 643\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": \"4c66c072e1da1b8da0c49bc3\",\n" +
+                "      \"name\": \"Oberża pod Złotym Prosiakiem\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"Nieborow 175 (droga na Zygmuntów)\",\n" +
+                "          \"99-416 Nieborow\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 52.07301102273241,\n" +
+                "        \"lng\": 20.051080644690177\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"4c66c072e1da1b8da0c49bc3\",\n" +
+                "        \"avg_rating\": 3,\n" +
+                "        \"number_of_ratings\": 267\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": \"5948067b17556232c3b7b42b\",\n" +
+                "      \"name\": \"MANGAL\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"Piotrkowska 71 (Stanisława Moniuszki)\",\n" +
+                "          \"90-422 Łódź\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 51.76803156480234,\n" +
+                "        \"lng\": 19.45671094579505\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"5948067b17556232c3b7b42b\",\n" +
+                "        \"avg_rating\": 5,\n" +
+                "        \"number_of_ratings\": 948\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": \"539224e2498e2185a92bf04e\",\n" +
+                "      \"name\": \"Z Innej Beczki\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"Moniuszki 6\",\n" +
+                "          \"Łódź\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 51.76836066857008,\n" +
+                "        \"lng\": 19.458965621288428\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"539224e2498e2185a92bf04e\",\n" +
+                "        \"avg_rating\": 2,\n" +
+                "        \"number_of_ratings\": 598\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": \"5632229e498e62f33721f5eb\",\n" +
+                "      \"name\": \"Gastromachina Stacja\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"Piotrkowska 89\",\n" +
+                "          \"Łódź\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 51.7662137351591,\n" +
+                "        \"lng\": 19.456500597102796\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"5632229e498e62f33721f5eb\",\n" +
+                "        \"avg_rating\": 5,\n" +
+                "        \"number_of_ratings\": 729\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": \"5085a966183f555704a5bdf7\",\n" +
+                "      \"name\": \"Pomodoro. Pizzeria i Stuzziccheria\",\n" +
+                "      \"location\": {\n" +
+                "        \"formattedAddress\": [\n" +
+                "          \"Rewolucji 1905 roku 4 (Piotrkowska)\",\n" +
+                "          \"90-273 Łódź\",\n" +
+                "          \"Polska\"\n" +
+                "        ],\n" +
+                "        \"lat\": 51.77486015806364,\n" +
+                "        \"lng\": 19.45608235463843\n" +
+                "      },\n" +
+                "      \"rating\": {\n" +
+                "        \"id\": \"5085a966183f555704a5bdf7\",\n" +
+                "        \"avg_rating\": 4,\n" +
+                "        \"number_of_ratings\": 975\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"original_distance\": 137666,\n" +
+                "  \"final_distance\": 152091,\n" +
+                "  \"original_duration\": 8934,\n" +
+                "  \"final_duration\": 15456\n" +
                 "}";
     }
 }

@@ -19,4 +19,8 @@ public class PointOfInterest {
     public Venue getVenue() {
         return venue;
     }
+
+    public HashMap<String, Road> getRoads() {
+        return roads;
+    }
 }
