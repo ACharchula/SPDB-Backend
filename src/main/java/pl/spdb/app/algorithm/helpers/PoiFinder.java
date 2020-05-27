@@ -26,12 +26,16 @@ public class PoiFinder {
     }
 
     //TODO add categories and/or prices and maybe change limit for places
-    public List<Venue> findPointsOfInterest(Leg leg) {
+    public List<Venue> findPointsOfInterest(Leg leg, int limit, String categories) {
+        if (limit > 50 || limit <= 0) {
+            limit = 10;
+        }
+
         List<Location> locations = getLocationsToLookout(leg.getSteps(), radius);
         Map<String, Venue> venues = new HashMap<>();
 
         for (Location location : locations) {
-            PoiResponse poiResponse = placesService.getRecommendations(location.getLat(), location.getLng(), radius, null, 10);
+            PoiResponse poiResponse = placesService.getRecommendations(location.getLat(), location.getLng(), radius, categories, limit);
             List<Result> results = poiResponse.getResponse().getGroup().getResults();
             for (Result result : results) {
                 Venue venue = result.getVenue();

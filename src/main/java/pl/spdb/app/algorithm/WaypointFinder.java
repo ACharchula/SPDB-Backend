@@ -12,11 +12,13 @@ import pl.spdb.app.model.graph.Graph;
 import pl.spdb.app.model.poi.Venue;
 import pl.spdb.app.model.poi.VenueLocation;
 import pl.spdb.app.model.route.Leg;
+import pl.spdb.app.model.route.Location;
 import pl.spdb.app.model.route.Routes;
 import pl.spdb.app.mongodb.RatingRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WaypointFinder {
@@ -34,31 +36,39 @@ public class WaypointFinder {
     }
 
     //TODO add restrictions
-    public FinalResult findWaypoints(Routes routes) {
-        long maxWydluzenieCzasu = 7200; //in sec TODO
-        long maxWydluzenieDrogi = 100000; //in meters TODO
+    //TODO maybe rating should be float?
+    //TODO maybe opening hours?
+    //TODO maybe place info about hour of visiting a place?
+    public FinalResult findWaypoints(Routes routes, long timeInPoi, int minimalRating, String categories,
+                                     long additionalTime, long additionalDistance, long searchingStart, boolean mocked) {
         //when no waypoints are specified there is only one route and leg
         Leg leg = routes.getRoutes().get(0).getLegs().get(0);
-        List<Venue> venues = poiFinder.findPointsOfInterest(leg);
+        List<Venue> venues = poiFinder.findPointsOfInterest(leg,10, categories);
         ratingProvider.provideRatings(venues);
 
-        Venue start = new Venue();
-        start.setLocation(new VenueLocation(leg.getStart_location(), Collections.singletonList(leg.getStart_address())));
-        start.setId("START");
-        Venue end = new Venue();
-        end.setLocation(new VenueLocation(leg.getEnd_location(), Collections.singletonList(leg.getEnd_address())));
-        end.setId("END");
-        venues.add(start);
-        venues.add(end);
+        venues = venues.stream()
+                .filter(v -> v.getRating().getAvgRating() >= minimalRating)
+                .collect(Collectors.toList());
 
-        Graph graph = graphCreator.create(venues);
-        FinalResult finalResult = Algorithm.run(graph, "START", "END", 600,
-                leg.getDuration().getValue() + maxWydluzenieCzasu, leg.getDistance().getValue() + maxWydluzenieDrogi);
+        venues.add(createVenue("START", leg.getStart_location(), leg.getStart_address()));
+        venues.add(createVenue("END", leg.getEnd_location(), leg.getEnd_address()));
+
+        Graph graph = graphCreator.create(venues, mocked);
+        FinalResult finalResult = Algorithm.run(graph, "START", "END", timeInPoi, searchingStart,
+                leg.getDuration().getValue() + additionalTime,
+                leg.getDistance().getValue() + additionalDistance);
 
         if (finalResult != null) {
             finalResult.setOriginal_distance(leg.getDistance().getValue());
             finalResult.setOriginal_duration(leg.getDuration().getValue());
         }
         return finalResult;
+    }
+
+    private Venue createVenue(String id, Location location, String address) {
+        Venue venue = new Venue();
+        venue.setLocation(new VenueLocation(location, Collections.singletonList(address)));
+        venue.setId(id);
+        return venue;
     }
 }

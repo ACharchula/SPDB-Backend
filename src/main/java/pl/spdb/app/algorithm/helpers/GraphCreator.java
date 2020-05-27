@@ -21,7 +21,7 @@ public class GraphCreator {
         this.distanceMatrixService = distanceMatrixService;
     }
 
-    public Graph create(List<Venue> venues) {
+    public Graph create(List<Venue> venues, boolean mocked) {
         Graph graph = new Graph();
         for (Venue venue : venues) {
             graph.addPointOfInterest(venue);
@@ -37,8 +37,11 @@ public class GraphCreator {
             for (int y = i+1; y < venues.size(); ++y) {
                 destinations.add(venues.get(y).getLatitudeAndLongitude());
             }
-            //List<Element> elements = distanceMatrixService.getDistanceMatrix(origins, destinations).getRows().get(0).getElements(); //TODO change for this when algorithm ready
-            List<Element> elements = new Gson().fromJson(distances.get(i), Rows.class).getRows().get(0).getElements(); //TODO this delete
+            List<Element> elements;
+            if (!mocked)
+                elements = distanceMatrixService.getDistanceMatrix(origins, destinations).getRows().get(0).getElements(); //TODO change to only this when algorithm ready
+            else
+                elements = new Gson().fromJson(distances.get(i), Rows.class).getRows().get(0).getElements(); //TODO this delete
 
             PointOfInterest pointOfInterest = graph.getPointOfInterest(venues.get(i).getId());
             for (int y = 0; y < elements.size(); ++y) {

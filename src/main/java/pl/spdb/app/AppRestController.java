@@ -3,12 +3,11 @@ package pl.spdb.app;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.spdb.app.algorithm.WaypointFinder;
 import pl.spdb.app.external.api.foursquare.places.PlacesService;
+import pl.spdb.app.external.api.google.directions.DirectionsService;
+import pl.spdb.app.model.api.FinalResult;
 import pl.spdb.app.model.route.Routes;
 
 import java.util.Map;
@@ -21,6 +20,9 @@ public class AppRestController {
     PlacesService placesService;
 
     @Autowired
+    DirectionsService directionsService;
+
+    @Autowired
     WaypointFinder waypointFinder;
 
     @GetMapping("/dev/test") //MOCKED DISTANCE MATRIX API
@@ -28,12 +30,31 @@ public class AppRestController {
         String json = getRoute();
         Gson gson = new Gson();
         Routes routes = gson.fromJson(json, Routes.class);
-        return gson.toJson(waypointFinder.findWaypoints(routes));
+        return gson.toJson(waypointFinder.findWaypoints(routes, 600, 0, "",
+                7200, 100000, 0, true));
     }
 
     @GetMapping("/dev/mocked_result")
     public @ResponseBody String testing2() {
         return getFinalResult();
+    }
+
+    //http://localhost:8080/api/waypoints?origin=Warsaw&destination=Lodz&timeInPoi=600&minimalRating=3&additionalTime=7200&additionalDistance=100000
+    @GetMapping("/api/waypoints")
+    public ResponseEntity<FinalResult> waypoints1(@RequestParam(value = "origin") String origin,
+                                                  @RequestParam(value = "destination") String destination,
+                                                  @RequestParam(value = "timeInPoi") long timeInPoi, //in seconds
+                                                  @RequestParam(value = "minimalRating", defaultValue = "0") int minimalRating,
+                                                  @RequestParam(value = "categories", defaultValue = "") String categories, //divided by comma
+                                                  @RequestParam(value = "additionalTime") long additionalTime, //in seconds
+                                                  @RequestParam(value = "additionalDistance") long additionalDistance,
+                                                  @RequestParam(value = "searchingStart", defaultValue = "0") long searchingStart) //in seconds
+    {
+
+        Routes routes = directionsService.getRoute(origin, destination);
+        return ResponseEntity.ok(waypointFinder.findWaypoints(routes, timeInPoi, minimalRating, categories,
+                additionalTime, additionalDistance, searchingStart, false)); //TODO maybe fail if routes won't work
+        //TODO remove mocked
     }
 
     @GetMapping("/api/categories")

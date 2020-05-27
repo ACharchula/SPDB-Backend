@@ -36,12 +36,12 @@ public class PlacesServiceImpl implements PlacesService {
     // localTime    - Only return results that are open at this time. HH in 24-hr format. (np. 20:00)
 
     @Override
-    public PoiResponse getRecommendations(Double lat, Double lng, Integer radius, List<String> categoryIds, Integer limit) {
+    public PoiResponse getRecommendations(Double lat, Double lng, Integer radius, String categoryIds, Integer limit) {
         return getRecommendations(lat, lng, radius, categoryIds, limit, null, null, null);
     }
 
     @Override
-    public PoiResponse getRecommendations(Double lat, Double lng, Integer radius, List<String> categoryIds, Integer limit,
+    public PoiResponse getRecommendations(Double lat, Double lng, Integer radius, String categoryIds, Integer limit,
                                           List<String> prices, Integer localDay, String localTime) {
 
         if (lat == null || lng == null)
@@ -52,7 +52,7 @@ public class PlacesServiceImpl implements PlacesService {
 
         url = addLL(lat, lng, url, params);
         if (radius != null && radius > 0 && radius < 100000) url = addRadius(radius, url, params);
-        if (categoryIds != null && categoryIds.size() > 0) url = addCategories(categoryIds, url, params);
+        if (categoryIds != null && !categoryIds.isEmpty()) url = addCategories(categoryIds, url, params);
         if (limit != null && limit > 0 && limit <= 50) url = addLimit(limit, url, params);
         if (prices != null && prices.size() > 0 & prices.size() <= 4) url = addPrices(prices, url, params);
         if (localDay != null && localDay > 0 && localDay <= 7) url = addLocalDay(localDay, url, params);
@@ -90,9 +90,9 @@ public class PlacesServiceImpl implements PlacesService {
         return url;
     }
 
-    private String addCategories(List<String> categoryIds, String url, Map<String, String> params) {
+    private String addCategories(String categoryIds, String url, Map<String, String> params) {
         url += "&categoryId={categories}";
-        params.put("categories", String.join(",", categoryIds));
+        params.put("categories", categoryIds); //divided by commas
         return url;
     }
 
