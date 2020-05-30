@@ -35,8 +35,6 @@ public class WaypointFinder {
         this.graphCreator = new GraphCreator(distanceMatrixService);
     }
 
-    //TODO add restrictions
-    //TODO maybe rating should be float?
     //TODO maybe opening hours?
     //TODO maybe place info about hour of visiting a place?
     public FinalResult findWaypoints(Routes routes, long timeInPoi, int minimalRating, String categories,

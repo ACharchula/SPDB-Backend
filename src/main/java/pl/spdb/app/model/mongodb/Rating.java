@@ -8,13 +8,11 @@ public class Rating {
 
     @Id
     private String id;
-    private int avg_rating;
-    private int number_of_ratings;
+    private float avg_rating;
 
-    public Rating(String id, int avg_rating, int number_of_ratings) {
+    public Rating(String id, float avg_rating) {
         this.id = id;
         this.avg_rating = avg_rating;
-        this.number_of_ratings = number_of_ratings;
     }
 
     public String getId() {
@@ -25,19 +23,11 @@ public class Rating {
         this.id = id;
     }
 
-    public int getAvgRating() {
+    public float getAvgRating() {
         return avg_rating;
     }
 
-    public void setAvgRating(int avg_rating) {
+    public void setAvgRating(float avg_rating) {
         this.avg_rating = avg_rating;
-    }
-
-    public int getNumberOfRatings() {
-        return number_of_ratings;
-    }
-
-    public void setNumberOfRatings(int number_of_ratings) {
-        this.number_of_ratings = number_of_ratings;
     }
 }

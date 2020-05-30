@@ -2,6 +2,7 @@ package pl.spdb.app;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.spdb.app.algorithm.WaypointFinder;
@@ -39,22 +40,26 @@ public class AppRestController {
         return getFinalResult();
     }
 
-    //http://localhost:8080/api/waypoints?origin=Warsaw&destination=Lodz&timeInPoi=600&minimalRating=3&additionalTime=7200&additionalDistance=100000
+    //TODO czy jest sens w posiadaniu rating 5?
     @GetMapping("/api/waypoints")
-    public ResponseEntity<FinalResult> waypoints1(@RequestParam(value = "origin") String origin,
+    public ResponseEntity<Object> waypoints1(@RequestParam(value = "origin") String origin,
                                                   @RequestParam(value = "destination") String destination,
-                                                  @RequestParam(value = "timeInPoi") long timeInPoi, //in seconds
+                                                  @RequestParam(value = "timeInPoi", defaultValue = "1800") long timeInPoi, //in seconds
                                                   @RequestParam(value = "minimalRating", defaultValue = "0") int minimalRating,
                                                   @RequestParam(value = "categories", defaultValue = "") String categories, //divided by comma
-                                                  @RequestParam(value = "additionalTime") long additionalTime, //in seconds
-                                                  @RequestParam(value = "additionalDistance") long additionalDistance,
+                                                  @RequestParam(value = "additionalTime", defaultValue = "9000") long additionalTime, //in seconds
+                                                  @RequestParam(value = "additionalDistance", defaultValue = "50000") long additionalDistance,
                                                   @RequestParam(value = "searchingStart", defaultValue = "0") long searchingStart) //in seconds
     {
-
         Routes routes = directionsService.getRoute(origin, destination);
-        return ResponseEntity.ok(waypointFinder.findWaypoints(routes, timeInPoi, minimalRating, categories,
-                additionalTime, additionalDistance, searchingStart, false)); //TODO maybe fail if routes won't work
-        //TODO remove mocked
+        FinalResult finalResult = waypointFinder.findWaypoints(routes, timeInPoi, minimalRating, categories,
+                additionalTime, additionalDistance, searchingStart, false); //TODO remove mocked
+
+        if (finalResult != null) {
+            return ResponseEntity.ok(finalResult);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No waypoints have been found for given parameters!");
+        }
     }
 
     @GetMapping("/api/categories")

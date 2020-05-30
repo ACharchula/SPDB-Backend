@@ -21,14 +21,12 @@ public class Algorithm {
     private static long timeInPoi;
     private static long timeLimit;
     private static long distanceLimit;
-    private static long searchingStart;
 
     private static List<String> bestPath;
     private static double bestPathReward;
     private static long time;
     private static long distance;
 
-    //TODO hour of looking for poi
     //TODO maybe use number of ratings also
     public static FinalResult run(Graph graph, String startId, String endId, long timeInPoiInSeconds, long searchingStart,
                                   long timeLimitInSeconds, long distanceLimitInMeters) {
@@ -67,8 +65,8 @@ public class Algorithm {
                         if (reward > bestPathReward) {
                             bestPath = newPath;
                             bestPathReward = reward;
-                            time = timeLimit - remainingTime;
-                            distance = distanceLimit - remainingDistance;
+                            time = timeLimit - newRemainingTime;
+                            distance = distanceLimit - newRemainingDistance;
                         }
                     } else {
                         //if no time or distance to spent and place is not end -> return

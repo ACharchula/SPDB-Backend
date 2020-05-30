@@ -25,13 +25,12 @@ public class PoiFinder {
         this.radius = radius;
     }
 
-    //TODO add categories and/or prices and maybe change limit for places
     public List<Venue> findPointsOfInterest(Leg leg, int limit, String categories) {
         if (limit > 50 || limit <= 0) {
             limit = 10;
         }
 
-        List<Location> locations = getLocationsToLookout(leg.getSteps(), radius);
+        List<Location> locations = getLocationsToLookout(leg, radius);
         Map<String, Venue> venues = new HashMap<>();
 
         for (Location location : locations) {
@@ -45,10 +44,16 @@ public class PoiFinder {
         return new ArrayList<>(venues.values());
     }
 
-    private List<Location> getLocationsToLookout(List<Step> steps, int radius) {
+    private List<Location> getLocationsToLookout(Leg leg, int radius) {
         List<Location> lookoutLocations = new ArrayList<>();
-        double metersFromLastLookout = radius;
+        List<Step> steps = leg.getSteps();
 
+        // case when trip is shorter than radius
+        if (leg.getDistance().getValue() <= radius) {
+            lookoutLocations.add(steps.get(0).getStart_location());
+        }
+
+        double metersFromLastLookout = radius;
         for (Step step : steps) {
             if (metersFromLastLookout - step.getDistance().getValue() > 0) {
                 metersFromLastLookout -= step.getDistance().getValue();

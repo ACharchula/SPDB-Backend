@@ -25,9 +25,8 @@ public class RatingProvider {
             Optional<Rating> optionalRating = ratingRepository.findById(venue.getId());
 
             if (optionalRating.isEmpty()) {
-                int numberOfRatings = generateNumberOfRatings();
-                int avgRating = (numberOfRatings == 0) ? 0 : generateAvgRating();
-                Rating rating = new Rating(venue.getId(), avgRating, numberOfRatings);
+                float avgRating = generateAvgRating();
+                Rating rating = new Rating(venue.getId(), avgRating);
                 venue.setRating(rating);
                 ratingRepository.save(rating);
             } else {
@@ -36,11 +35,7 @@ public class RatingProvider {
         }
     }
 
-    private int generateAvgRating() {
-        return random.nextInt(5) + 1; // [1,5]
-    }
-
-    private int generateNumberOfRatings() {
-        return random.nextInt(1001); // [0,1000]
+    private float generateAvgRating() {
+        return 1 + random.nextFloat() * (5 - 1);
     }
 }
