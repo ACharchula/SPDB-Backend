@@ -9,6 +9,7 @@ import pl.spdb.app.algorithm.WaypointFinder;
 import pl.spdb.app.external.api.foursquare.places.PlacesService;
 import pl.spdb.app.external.api.google.directions.DirectionsService;
 import pl.spdb.app.model.api.FinalResult;
+import pl.spdb.app.model.api.Parameters;
 import pl.spdb.app.model.route.Routes;
 
 import java.util.Map;
@@ -56,6 +57,7 @@ public class AppRestController {
                 additionalTime, additionalDistance, searchingStart, false); //TODO remove mocked
 
         if (finalResult != null) {
+            finalResult.setParameters(new Parameters(timeInPoi, minimalRating, categories, additionalTime, additionalDistance, searchingStart));
             return ResponseEntity.ok(finalResult);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No waypoints have been found for given parameters!");

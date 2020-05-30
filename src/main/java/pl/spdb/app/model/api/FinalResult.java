@@ -13,6 +13,8 @@ public class FinalResult {
     private long originalDuration;
     private long finalDuration;
 
+    private Parameters parameters;
+
     public FinalResult(List<Venue> waypoints, long distance, long duration) {
         this.waypoints = waypoints;
         this.finalDistance = distance;
@@ -57,5 +59,13 @@ public class FinalResult {
 
     public void setOriginalDuration(long originalDuration) {
         this.originalDuration = originalDuration;
+    }
+
+    public Parameters getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Parameters parameters) {
+        this.parameters = parameters;
     }
 }
