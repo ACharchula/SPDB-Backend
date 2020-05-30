@@ -59,8 +59,8 @@ public class WaypointFinder {
                 leg.getDistance().getValue() + additionalDistance);
 
         if (finalResult != null) {
-            finalResult.setOriginal_distance(leg.getDistance().getValue());
-            finalResult.setOriginal_duration(leg.getDuration().getValue());
+            finalResult.setOriginalDistance(leg.getDistance().getValue());
+            finalResult.setOriginalDuration(leg.getDuration().getValue());
         }
         return finalResult;
     }

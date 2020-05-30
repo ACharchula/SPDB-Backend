@@ -931,10 +931,10 @@ public class AppRestController {
                 "      }\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  \"original_distance\": 137666,\n" +
-                "  \"final_distance\": 152091,\n" +
-                "  \"original_duration\": 8934,\n" +
-                "  \"final_duration\": 15456\n" +
+                "  \"originalDistance\": 137666,\n" +
+                "  \"finalDistance\": 152091,\n" +
+                "  \"originalDuration\": 8934,\n" +
+                "  \"finalDuration\": 15456\n" +
                 "}";
     }
 }
