@@ -1,6 +1,5 @@
 package pl.spdb.app.external.api.google.directions;
 
-import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.spdb.app.external.api.ApiKeyProvider;
@@ -13,7 +12,7 @@ import java.util.Map;
 public class DirectionsServiceImpl implements DirectionsService {
 
     private final static String url = "https://maps.googleapis.com/maps/api/directions/json?" +
-            "origin={origin}&destination={destination}&key={key}&avoid=highways"; //TODO make sure that avoiding highways is also on frontend
+            "origin={origin}&destination={destination}&key={key}&avoid=highways";
 
     private final RestTemplate restTemplate = new RestTemplate();
 

@@ -1,6 +1,5 @@
 package pl.spdb.app.external.api.foursquare.places;
 
-import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.spdb.app.external.api.ApiKeyProvider;

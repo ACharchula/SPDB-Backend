@@ -36,6 +36,6 @@ public class RatingProvider {
     }
 
     private float generateAvgRating() {
-        return 1 + random.nextFloat() * (5 - 1);
+        return 1 + random.nextFloat() * (6 - 1);
     }
 }

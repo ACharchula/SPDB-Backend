@@ -27,7 +27,6 @@ public class Algorithm {
     private static long time;
     private static long distance;
 
-    //TODO maybe use number of ratings also
     public static FinalResult run(Graph graph, String startId, String endId, long timeInPoiInSeconds, long searchingStart,
                                   long timeLimitInSeconds, long distanceLimitInMeters) {
         Algorithm.graph = graph;

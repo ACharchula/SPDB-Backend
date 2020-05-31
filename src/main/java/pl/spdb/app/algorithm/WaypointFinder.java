@@ -35,10 +35,8 @@ public class WaypointFinder {
         this.graphCreator = new GraphCreator(distanceMatrixService);
     }
 
-    //TODO maybe opening hours?
-    //TODO maybe place info about hour of visiting a place?
     public FinalResult findWaypoints(Routes routes, long timeInPoi, int minimalRating, String categories,
-                                     long additionalTime, long additionalDistance, long searchingStart, boolean mocked) {
+                                     long additionalTime, long additionalDistance, long searchingStart) {
         //when no waypoints are specified there is only one route and leg
         Leg leg = routes.getRoutes().get(0).getLegs().get(0);
         List<Venue> venues = poiFinder.findPointsOfInterest(leg,10, categories);
@@ -59,7 +57,7 @@ public class WaypointFinder {
         venues.add(createVenue("START", leg.getStart_location(), leg.getStart_address(), 0));
         venues.add(createVenue("END", leg.getEnd_location(), leg.getEnd_address(), maxGroupId));
 
-        Graph graph = graphCreator.create(venues, mocked);
+        Graph graph = graphCreator.create(venues);
         FinalResult finalResult = Algorithm.run(graph, "START", "END", timeInPoi, searchingStart,
                 leg.getDuration().getValue() + additionalTime,
                 leg.getDistance().getValue() + additionalDistance);
