@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>pl.spdb</groupId>
-	<artifactId>app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>app</name>
+	<artifactId>SPDB</artifactId>
+	<version>1.0</version>
+	<name>SPDB</name>
 	<description>App for SPDB</description>
 
 	<properties>
