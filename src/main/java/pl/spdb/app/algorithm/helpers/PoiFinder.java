@@ -33,13 +33,16 @@ public class PoiFinder {
         List<Location> locations = getLocationsToLookout(leg, radius);
         Map<String, Venue> venues = new HashMap<>();
 
+        int groupId = 0;
         for (Location location : locations) {
             PoiResponse poiResponse = placesService.getRecommendations(location.getLat(), location.getLng(), radius, categories, limit);
             List<Result> results = poiResponse.getResponse().getGroup().getResults();
             for (Result result : results) {
                 Venue venue = result.getVenue();
+                venue.setGroupId(groupId);
                 venues.putIfAbsent(venue.getId(), venue); //do not insert duplicates
             }
+            groupId++;
         }
         return new ArrayList<>(venues.values());
     }

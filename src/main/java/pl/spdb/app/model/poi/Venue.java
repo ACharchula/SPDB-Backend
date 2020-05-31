@@ -8,6 +8,8 @@ public class Venue {
     private VenueLocation location;
     private Rating rating;
 
+    private int groupId;
+
     public String getId() {
         return id;
     }
@@ -42,5 +44,13 @@ public class Venue {
 
     public String getLatitudeAndLongitude() {
         return location.getLat() + "," + location.getLng();
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 }

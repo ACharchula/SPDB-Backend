@@ -48,8 +48,16 @@ public class WaypointFinder {
                 .filter(v -> v.getRating().getAvgRating() >= minimalRating)
                 .collect(Collectors.toList());
 
-        venues.add(createVenue("START", leg.getStart_location(), leg.getStart_address()));
-        venues.add(createVenue("END", leg.getEnd_location(), leg.getEnd_address()));
+        if (venues.size() == 0)
+            return null;
+
+        int maxGroupId = venues.stream()
+                .mapToInt(Venue::getGroupId)
+                .max()
+                .getAsInt();
+
+        venues.add(createVenue("START", leg.getStart_location(), leg.getStart_address(), 0));
+        venues.add(createVenue("END", leg.getEnd_location(), leg.getEnd_address(), maxGroupId));
 
         Graph graph = graphCreator.create(venues, mocked);
         FinalResult finalResult = Algorithm.run(graph, "START", "END", timeInPoi, searchingStart,
@@ -63,10 +71,11 @@ public class WaypointFinder {
         return finalResult;
     }
 
-    private Venue createVenue(String id, Location location, String address) {
+    private Venue createVenue(String id, Location location, String address, int groupId) {
         Venue venue = new Venue();
         venue.setLocation(new VenueLocation(location, Collections.singletonList(address)));
         venue.setId(id);
+        venue.setGroupId(groupId);
         return venue;
     }
 }

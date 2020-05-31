@@ -51,9 +51,12 @@ public class Algorithm {
                                      double reward, long searchingStart) {
         for (String poiId : poi.getRoads().keySet()) {
             if (!path.contains(poiId)) {
+                //don't move back to poi which are earlier in trip
+                if (!isProperGroupId(poiId, poi)) continue;
+
                 Road road = poi.getRoads().get(poiId);
-                //If there is a search time set check if road is long enough
-                if (searchingStart != 0 && searchingStart > road.getDuration().getValue()) return;
+                //If there is a search time set, check if road is long enough
+                if (searchingStart != 0 && searchingStart > road.getDuration().getValue()) continue;
                 else if (searchingStart != 0) searchingStart = 0;
 
                 long newRemainingTime = remainingTime - road.getDuration().getValue();
@@ -70,9 +73,9 @@ public class Algorithm {
                         }
                     } else {
                         //if no time or distance to spent and place is not end -> return
-                        if (newRemainingTime == 0 || newRemainingDistance == 0) return;
+                        if (newRemainingTime == 0 || newRemainingDistance == 0) continue;
                         // if too many poi -> return
-                        if (newPath.size() == MAX_NUMBER_OF_POI + 2) return;
+                        if (newPath.size() == MAX_NUMBER_OF_POI + 2) continue;
 
                         newRemainingTime = newRemainingTime - timeInPoi;
                         if (newRemainingTime > 0) {
@@ -101,5 +104,11 @@ public class Algorithm {
                     .collect(Collectors.toList());
             return new FinalResult(waypoints, distance, time);
         }
+    }
+
+    private static boolean isProperGroupId(String poiId, PointOfInterest lastPoint) {
+        int lastGroupId = lastPoint.getVenue().getGroupId();
+        int nextGroupId = graph.getPointOfInterest(poiId).getVenue().getGroupId();
+        return nextGroupId >= lastGroupId;
     }
 }
