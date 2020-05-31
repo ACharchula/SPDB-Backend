@@ -56,7 +56,6 @@ public class Algorithm {
                 Road road = poi.getRoads().get(poiId);
                 //If there is a search time set, check if road is long enough
                 if (searchingStart != 0 && searchingStart > road.getDuration().getValue()) continue;
-                else if (searchingStart != 0) searchingStart = 0;
 
                 long newRemainingTime = remainingTime - road.getDuration().getValue();
                 long newRemainingDistance = remainingDistance - road.getDistance().getValue();
@@ -81,7 +80,7 @@ public class Algorithm {
                         if (newRemainingTime > 0) {
                             findBestPath(newRemainingTime, newRemainingDistance, graph.getPointOfInterest(poiId), clonePath(newPath),
                                     reward + graph.getPointOfInterest(poiId).getVenue().getRating().getAvgRating(),
-                                    searchingStart);
+                                    0);
                         }
                     }
                 }
