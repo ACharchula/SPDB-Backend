@@ -29,12 +29,13 @@ public class GraphCreator {
             origins.add(venues.get(i).getLatitudeAndLongitude()); //set only one origin
 
             List<String> destinations = new ArrayList<>();
-            for (int y = i+1; y < venues.size(); ++y) {
+            for (int y = i+1; y < venues.size(); ++y) { //set the rest of the destination which are after the origin in the list
                 destinations.add(venues.get(y).getLatitudeAndLongitude());
             }
-            List<Element> elements;
-            elements = distanceMatrixService.getDistanceMatrix(origins, destinations).getRows().get(0).getElements();
+            //get all the roads and its lengths
+            List<Element> elements = distanceMatrixService.getDistanceMatrix(origins, destinations).getRows().get(0).getElements();
 
+            //assign results to pointsOfInterests
             PointOfInterest pointOfInterest = graph.getPointOfInterest(venues.get(i).getId());
             for (int y = 0; y < elements.size(); ++y) {
                 String destination = venues.get(i+y+1).getId();

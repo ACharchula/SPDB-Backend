@@ -36,14 +36,19 @@ public class AppRestController {
                                                   @RequestParam(value = "additionalDistance", defaultValue = "50000") long additionalDistance,
                                                   @RequestParam(value = "searchingStart", defaultValue = "0") long searchingStart) //in seconds
     {
+        //getting original route form origin to destination
         Routes routes = directionsService.getRoute(origin, destination);
+
+        //running code which will find best waypoints according to given restrictions
         FinalResult finalResult = waypointFinder.findWaypoints(routes, timeInPoi, minimalRating, categories,
                 additionalTime, additionalDistance, searchingStart);
 
         if (finalResult != null) {
+            //adding information about the restrictions
             finalResult.setParameters(new Parameters(timeInPoi, minimalRating, categories, additionalTime, additionalDistance, searchingStart));
             return ResponseEntity.ok(finalResult);
         } else {
+            //return error when no waypoints have been found for given arguments
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No waypoints have been found for given parameters!");
         }
     }

@@ -24,6 +24,7 @@ public class RatingProvider {
         for (Venue venue : venues) {
             Optional<Rating> optionalRating = ratingRepository.findById(venue.getId());
 
+            //check if there is a rating for given venue
             if (optionalRating.isEmpty()) {
                 float avgRating = generateAvgRating();
                 Rating rating = new Rating(venue.getId(), avgRating);

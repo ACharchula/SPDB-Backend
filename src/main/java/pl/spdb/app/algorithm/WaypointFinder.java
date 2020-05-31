@@ -37,11 +37,15 @@ public class WaypointFinder {
 
     public FinalResult findWaypoints(Routes routes, long timeInPoi, int minimalRating, String categories,
                                      long additionalTime, long additionalDistance, long searchingStart) {
-        //when no waypoints are specified there is only one route and leg
+        //getting first leg, because when no waypoints are specified there is always only one route and leg
         Leg leg = routes.getRoutes().get(0).getLegs().get(0);
+
+        //getting venues found on the original path
         List<Venue> venues = poiFinder.findPointsOfInterest(leg,10, categories);
+        //enriching them with ratings
         ratingProvider.provideRatings(venues);
 
+        //filtering out venues with rating smaller than minimalRating
         venues = venues.stream()
                 .filter(v -> v.getRating().getAvgRating() >= minimalRating)
                 .collect(Collectors.toList());
@@ -58,6 +62,7 @@ public class WaypointFinder {
         venues.add(createVenue("END", leg.getEnd_location(), leg.getEnd_address(), maxGroupId));
 
         Graph graph = graphCreator.create(venues);
+
         FinalResult finalResult = Algorithm.run(graph, "START", "END", timeInPoi, searchingStart,
                 leg.getDuration().getValue() + additionalTime,
                 leg.getDistance().getValue() + additionalDistance);

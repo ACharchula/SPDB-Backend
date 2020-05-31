@@ -60,13 +60,14 @@ public class PoiFinder {
         for (Step step : steps) {
             if (metersFromLastLookout - step.getDistance().getValue() > 0) {
                 metersFromLastLookout -= step.getDistance().getValue();
-            } else {
+            } else { //find point between steps
                 Location start = step.getStart_location();
                 Location end = step.getEnd_location();
 
                 double bearing = getBearing(start.getLat(), start.getLng(), end.getLat(), end.getLng());
                 lookoutLocations.add(getPointFromStartPoint(start.getLat(), start.getLng(), bearing, metersFromLastLookout));
 
+                //keep finding points between steps until we reach the end point
                 while ((metersFromLastLookout = distanceFromLastLookoutPointToTheEndOfStep(lookoutLocations, end)) / radius >= 1) {
                     start = lookoutLocations.get(lookoutLocations.size() - 1);
                     lookoutLocations.add(getPointFromStartPoint(start.getLat(), start.getLng(), bearing, radius));

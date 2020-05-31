@@ -37,8 +37,8 @@ public class Algorithm {
 
         Algorithm.bestPath = new ArrayList<>(Arrays.asList(startId, endId));
         Algorithm.bestPathReward = 0;
-        Algorithm.time = 0;
-        Algorithm.distance = 0;
+        Algorithm.time = 0; //trip duration for best path
+        Algorithm.distance = 0; //trip distance for best path
 
         findBestPath(timeLimitInSeconds, distanceLimitInMeters, graph.getPointOfInterest(startId),
                 new ArrayList<>(Collections.singletonList(startId)), 0.0, searchingStart);
@@ -62,7 +62,7 @@ public class Algorithm {
                 if (newRemainingTime >= 0 && newRemainingDistance >= 0) {
                     List<String> newPath = clonePath(path);
                     newPath.add(poiId);
-                    if (poiId.equals(endId)) {
+                    if (poiId.equals(endId)) { //reached end point
                         double newReward = reward / newPath.size();
                         if (newReward > bestPathReward) {
                             bestPath = newPath;
@@ -71,9 +71,9 @@ public class Algorithm {
                             distance = distanceLimit - newRemainingDistance;
                         }
                     } else {
-                        //if no time or distance to spent and place is not end -> return
+                        //if no time or distance to spent and place is not end -> skip
                         if (newRemainingTime == 0 || newRemainingDistance == 0) continue;
-                        // if too many poi -> return
+                        // if too many poi -> skip
                         if (newPath.size() == MAX_NUMBER_OF_POI + 2) continue;
 
                         newRemainingTime = newRemainingTime - timeInPoi;
