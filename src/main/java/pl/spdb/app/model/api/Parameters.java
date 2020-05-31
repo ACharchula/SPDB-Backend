@@ -23,6 +23,8 @@ public class Parameters {
     }
 
     public void setCategories(String categories) {
+        if(categories.isEmpty()) return;
+
         String[] ids = categories.split(",");
         for (String id : ids) {
             this.categories.add(AllCategories.CATEGORIES.get(id));
