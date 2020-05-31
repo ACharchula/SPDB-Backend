@@ -27,7 +27,7 @@ public class AppRestController {
     WaypointFinder waypointFinder;
 
     @GetMapping("/api/waypoints")
-    public ResponseEntity<Object> waypoints1(@RequestParam(value = "origin") String origin,
+    public ResponseEntity<Object> waypoints(@RequestParam(value = "origin") String origin,
                                                   @RequestParam(value = "destination") String destination,
                                                   @RequestParam(value = "timeInPoi", defaultValue = "1800") long timeInPoi, //in seconds
                                                   @RequestParam(value = "minimalRating", defaultValue = "0") int minimalRating,

@@ -64,9 +64,10 @@ public class Algorithm {
                     List<String> newPath = clonePath(path);
                     newPath.add(poiId);
                     if (poiId.equals(endId)) {
-                        if (reward > bestPathReward) {
+                        double newReward = reward / newPath.size();
+                        if (newReward > bestPathReward) {
                             bestPath = newPath;
-                            bestPathReward = reward;
+                            bestPathReward = newReward;
                             time = timeLimit - newRemainingTime;
                             distance = distanceLimit - newRemainingDistance;
                         }
