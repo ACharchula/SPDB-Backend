@@ -1,5 +1,5 @@
 # SPDB-Backend
-Required Java 11
+Required JDK 11
 
 # Running:
 - run command in root of the project -> mvn install
